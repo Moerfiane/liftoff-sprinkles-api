@@ -1,2 +1,4 @@
-package org.launchcode.sprinklespre.controllers;public class UserController {
+package org.launchcode.sprinklespre.controllers;
+
+public class UserController {
 }

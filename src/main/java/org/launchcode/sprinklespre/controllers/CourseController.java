@@ -1,2 +1,4 @@
-package org.launchcode.sprinklespre.controllers;public class CourseController {
+package org.launchcode.sprinklespre.controllers;
+
+public class CourseController {
 }

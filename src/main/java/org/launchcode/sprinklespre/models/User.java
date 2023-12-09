@@ -4,24 +4,24 @@ import jakarta.persistence.Entity;
 import java.util.Objects;
 
 @Entity
-public class Enroll extends AbstractEntity {
+public class User extends AbstractEntity {
 
-    private String title;
+    private String name;
     private int enrolled;
 
-    public Enroll(String title, int enrolled) {
-        this.title = title;
+    public User(String name, int enrolled) {
+        this.name = name;
         this.enrolled = enrolled;
     }
 
-    public Enroll() {}
+    public User() {}
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getEnrolled() {
@@ -34,8 +34,8 @@ public class Enroll extends AbstractEntity {
 
     @Override
     public String toString() {
-        return "Course{" +
-                "title='" + title + '\'' +
+        return "User{" +
+                "name='" + name + '\'' +
                 ", enrolled=" + enrolled +
                 '}';
     }
@@ -44,13 +44,13 @@ public class Enroll extends AbstractEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Enroll course = (Enroll) o;
-        return enrolled == course.enrolled && Objects.equals(title, course.title);
+        if (!super.equals(o)) return false;
+        User user = (User) o;
+        return enrolled == user.enrolled && Objects.equals(name, user.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, enrolled);
+        return Objects.hash(super.hashCode(), name, enrolled);
     }
-
 }
