@@ -16,7 +16,7 @@ public class Module extends AbstractEntity{
         this.isCompleted = false;
     }
 
-    void completedModule() {
+    void finishModule() {
         this.isCompleted = true;
     }
 }
