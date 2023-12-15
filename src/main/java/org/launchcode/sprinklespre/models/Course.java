@@ -47,4 +47,5 @@ public class Course extends AbstractEntity{
     public int getTotalModules() {
         return modules.size();
     }
+
 }
