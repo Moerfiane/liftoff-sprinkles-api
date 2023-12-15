@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class User extends AbstractEntity {
+public class User extends AbstractEntity{
+
     @NotNull
     private String username;
 
@@ -26,7 +27,6 @@ public class User extends AbstractEntity {
         this.username = username;
         this.pwHash = encoder.encode(password);
     }
-
     // Existing getters and setters
 
     public String getUsername() {
