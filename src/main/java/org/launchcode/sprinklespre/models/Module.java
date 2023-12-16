@@ -1,7 +1,9 @@
 package org.launchcode.sprinklespre.models;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 
+@Entity
 public class Module extends AbstractEntity{
 
     @ManyToOne
