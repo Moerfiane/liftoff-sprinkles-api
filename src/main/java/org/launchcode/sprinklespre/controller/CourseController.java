@@ -1,4 +1,4 @@
-package org.launchcode.sprinklespre.controllers;
+package org.launchcode.sprinklespre.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
