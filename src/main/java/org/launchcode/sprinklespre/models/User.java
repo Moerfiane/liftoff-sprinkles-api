@@ -46,4 +46,12 @@ public class User extends AbstractEntity{
         this.courses = courses;
     }
 
+    public boolean enrollInCourse(Course course) {
+        if(!this.courses.contains(course)) {
+            this.courses.add(course);
+            return true;
+        }
+        return false;
+    }
+
 }
