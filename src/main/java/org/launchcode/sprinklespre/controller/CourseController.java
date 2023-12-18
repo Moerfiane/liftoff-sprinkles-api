@@ -2,7 +2,6 @@ package org.launchcode.sprinklespre.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.launchcode.sprinklespre.controller.AuthenticationController;
 import org.launchcode.sprinklespre.models.Course;
 import org.launchcode.sprinklespre.models.User;
 import org.launchcode.sprinklespre.models.data.CourseRepository;
@@ -104,6 +103,6 @@ public class CourseController {
         user.getCourses().remove(course);
         userRepository.save(user);
 
-        return "courses/unenroll";
+        return "redirect:/courses";
     }
 }
