@@ -1,4 +1,4 @@
-package org.launchcode.sprinklespre.controllers;
+package org.launchcode.sprinklespre.controller;
 
 public class CourseCountroller {
     //TODO: Set up CourseRepository
