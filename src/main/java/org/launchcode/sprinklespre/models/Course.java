@@ -1,5 +1,6 @@
 package org.launchcode.sprinklespre.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
@@ -13,10 +14,16 @@ public class Course extends AbstractEntity{
 
     @OneToMany
     @JoinColumn(name = "course_id")
+    @JsonManagedReference
     private List<Module> modules = new ArrayList<>();
 
     @ManyToMany
     private List<User> users = new ArrayList<>();
+    //TODO: Add title
+    //TODO: Add description
+    //TODO: Consider how best to add image url: where will this be stored, how will it be accessed?
+    //TODO: Add difficulty (enum?)
+    //TODO: Add cuisine (e.g., vegetarian, gluten-free) - model after skills
 
     public Course() {}
 
