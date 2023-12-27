@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 public class User extends AbstractEntity{
-
+    //TODO: Map Courses to User with Many to Many relationships
     @NotNull
     private String username;
 

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.Optional;
 
 @Controller
-@RequestMapping
+@RequestMapping("/courses")
 public class CourseController {
 
     @Autowired
@@ -34,7 +34,7 @@ public class CourseController {
         return "courses/index";
     }
 
-    @GetMapping("/view")
+    @GetMapping("/view/{courseId}")
     public String viewCourse(@PathVariable Integer courseId, Model model) {
         Course course = courseRepository.findById(courseId).orElse(null);
         if (course == null) {
