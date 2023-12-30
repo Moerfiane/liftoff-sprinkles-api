@@ -10,19 +10,21 @@ import java.util.List;
 
 @Entity
 public class User extends AbstractEntity{
+    @ManyToMany(mappedBy ="users")
+    private List<Course> courses = new ArrayList<>();
+
     @NotNull
     private String username;
 
     @NotNull
     private String pwHash;
-    private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    @ManyToMany(mappedBy = "users")
-    private List<Course> courses = new ArrayList<>();
+    private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public User() {}
 
     public User(String username, String password) {
+        super();
         this.username = username;
         this.pwHash = encoder.encode(password);
     }
@@ -35,8 +37,6 @@ public class User extends AbstractEntity{
     public boolean isMatchingPassword(String password) {
         return encoder.matches(password, pwHash);
     }
-
-    // Getters and setters for courses
     public List<Course> getCourses() {
         return courses;
     }
