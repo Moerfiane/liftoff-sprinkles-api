@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "http://127.0.0.1:5174/", maxAge = 3600)
 @RestController
-@RequestMapping("/api/courses")
+@RequestMapping("/courses")
 public class ApiCourseController {
     @Autowired
     private CourseRepository courseRepository;
@@ -31,5 +31,11 @@ public class ApiCourseController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PostMapping("create")
+    public ResponseEntity<String> processAddCourseForm(@RequestBody Course course){
+        //TODO: put data into CourseRepository
+        return ResponseEntity.ok("Data received successfully");
     }
 }
