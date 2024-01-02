@@ -18,7 +18,21 @@ public class Course extends AbstractEntity{
     @ManyToMany
     private List<User> users = new ArrayList<>();
 
+    //Description of the course
+    private String description;
+
+    //How difficult is the course (1-beginner, 2-intermediate, 3-advanced)
+    private String difficulty;
+
     public Course() {}
+
+    public Course(List<Module> modules, List<User> users, String description, String difficulty) {
+        super();
+        this.modules = modules;
+        this.users = users;
+        this.description = description;
+        this.difficulty = difficulty;
+    }
 
     public Course(List<Module> modules, List<User> someUsers) {
         super();
@@ -46,5 +60,21 @@ public class Course extends AbstractEntity{
     // Course progress based on how many completed modules vs how many total in course
     public int getTotalModules() {
         return modules.size();
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
     }
 }
