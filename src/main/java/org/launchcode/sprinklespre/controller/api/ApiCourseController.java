@@ -10,7 +10,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://127.0.0.1:5174/", maxAge = 3600)
+//TODO: Create some data in MySQL
+//TODO: Git pull and start using CourseController
+//TODO: Test get all Courses
+
+@CrossOrigin(origins = "http://localhost:5173", maxAge = 5800)
 @RestController
 @RequestMapping("/courses")
 public class ApiCourseController {
@@ -33,9 +37,9 @@ public class ApiCourseController {
         }
     }
 
-    @PostMapping("create")
+    @PostMapping("/create")
     public ResponseEntity<String> processAddCourseForm(@RequestBody Course course){
         //TODO: put data into CourseRepository
-        return ResponseEntity.ok("Data received successfully");
+        return ResponseEntity.ok("this is a response");
     }
 }
