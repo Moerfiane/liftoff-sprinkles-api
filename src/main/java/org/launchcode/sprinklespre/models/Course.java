@@ -18,12 +18,16 @@ public class Course extends AbstractEntity{
     @ManyToMany
     private List<User> users = new ArrayList<>();
 
+    @ManyToMany
+    private List<User> favoritedBy = new ArrayList<>();
+
     public Course() {}
 
     public Course(List<Module> modules, List<User> someUsers) {
         super();
         this.modules = modules;
         this.users.addAll(someUsers);
+        this.favoritedBy = new ArrayList<>();
     }
 
     // Getters and setters
@@ -48,12 +52,32 @@ public class Course extends AbstractEntity{
         return modules.size();
     }
 
+    public List<User> getFavoritedBy() {
+        return favoritedBy;
+    }
+
+    public void setFavoritedBy(List<User> favoritedBy) {
+        this.favoritedBy = favoritedBy;
+    }
+
     public boolean enrollUser(User user) {
         if (!this.users.contains((user))) {
             this.users.add(user);
             return true;
         }
         return false;
+    }
+
+    public boolean addFavorite(User user) {
+        if (!this.favoritedBy.contains(user)) {
+            this.favoritedBy.add(user);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeFavorite(User user) {
+        return this.favoritedBy.remove(user);
     }
 
 }

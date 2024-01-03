@@ -104,4 +104,58 @@ public class CourseController {
 
         return "redirect:/courses";
     }
+
+    @PostMapping("/favorite/{courseId}")
+    public String favoriteCourse(@PathVariable Integer courseId, HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession();
+        User user = authenticationController.getUserFromSession(session);
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        Optional<Course> optionalCourse = courseRepository.findById(courseId);
+        if (optionalCourse.isEmpty()) {
+            model.addAttribute("favoriteError", "Course not found.");
+            return "redirect:/courses";
+        }
+
+        Course course = optionalCourse.get();
+
+        if (course.getFavoritedBy().contains(user)) {
+            model.addAttribute("favoriteError", "You have already favorited this course.");
+            return "redirect:/courses/view/" + courseId;
+        }
+
+        course.addFavorite(user);
+        courseRepository.save(course);
+
+        return "redirect:/courses/view/" + courseId;
+    }
+
+    @PostMapping("/unfavorite/{courseId}")
+    public String unfavoriteCourse(@PathVariable Integer courseId, HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession();
+        User user = authenticationController.getUserFromSession(session);
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        Optional<Course> optionalCourse = courseRepository.findById(courseId);
+        if (optionalCourse.isEmpty()) {
+            model.addAttribute("unfavoriteError", "Course not found.");
+            return "redirect:/courses";
+        }
+
+        Course course = optionalCourse.get();
+
+        if (!course.getFavoritedBy().contains(user)) {
+            model.addAttribute("unfavoriteError", "You have not favorited this course.");
+            return "redirect:/courses/view/" + courseId;
+        }
+
+        course.removeFavorite(user);
+        courseRepository.save(course);
+
+        return "redirect:/courses/view/" + courseId;
+    }
 }
