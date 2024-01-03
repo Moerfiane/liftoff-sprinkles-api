@@ -18,14 +18,14 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5182", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
 public class AuthenticationController {
     @Autowired
     UserRepository userRepository;
     private static final String userSessionKey = "user";
 
 
-
+//how do we use this
     public User getUserFromSession(HttpSession session) {
         Integer userId = (Integer) session.getAttribute(userSessionKey);
         if (userId == null) {
@@ -52,13 +52,11 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody RegisterFormDTO registerFormDTO) {
 
-
         User existingUser = userRepository.findByUsername(registerFormDTO.getUsername());
 
         if (existingUser != null) {
             return ResponseEntity.ok(Map.of("success", false, "message", "User already exists"));
         }
-
 
         String password = registerFormDTO.getPassword();
         String verifyPassword = registerFormDTO.getVerifyPassword();
@@ -91,8 +89,8 @@ public class AuthenticationController {
         if (!theUser.isMatchingPassword(password)) {
             return ResponseEntity.badRequest().body("Invalid password");
         }
-
-       return ResponseEntity.ok("User logged in successfully");
+//Was not receiving success message on front end
+       return ResponseEntity.ok(Map.of("success", true, "message", "User registered successfully"));
     }
     @GetMapping("/logout")
     public ResponseEntity<?> logout() {
