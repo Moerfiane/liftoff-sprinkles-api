@@ -22,11 +22,11 @@ public class Course extends AbstractEntity{
     private String description;
 
     //How difficult is the course (1-beginner, 2-intermediate, 3-advanced)
-    private String difficulty;
+    private Integer difficulty;
 
     public Course() {}
 
-    public Course(List<Module> modules, List<User> users, String description, String difficulty) {
+    public Course(List<Module> modules, List<User> users, String description, Integer difficulty) {
         super();
         this.modules = modules;
         this.users = users;
@@ -70,11 +70,11 @@ public class Course extends AbstractEntity{
         this.description = description;
     }
 
-    public String getDifficulty() {
+    public Integer getDifficulty() {
         return difficulty;
     }
 
-    public void setDifficulty(String difficulty) {
+    public void setDifficulty(Integer difficulty) {
         this.difficulty = difficulty;
     }
 }
