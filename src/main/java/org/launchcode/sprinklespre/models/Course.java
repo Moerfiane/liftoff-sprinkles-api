@@ -47,4 +47,13 @@ public class Course extends AbstractEntity{
     public int getTotalModules() {
         return modules.size();
     }
+
+    public boolean enrollUser(User user) {
+        if (!this.users.contains((user))) {
+            this.users.add(user);
+            return true;
+        }
+        return false;
+    }
+
 }

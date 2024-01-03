@@ -99,7 +99,4 @@ public class AuthenticationController {
 
         return ResponseEntity.ok("Logout successful");
     }
-
-
-
 }
