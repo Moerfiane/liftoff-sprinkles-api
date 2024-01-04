@@ -5,7 +5,6 @@ import jakarta.persistence.ManyToMany;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 public class Ingredient extends AbstractEntity{
@@ -17,9 +16,6 @@ public class Ingredient extends AbstractEntity{
     private Double amountNeeded;
 
     private String unit;
-
-    // What type of ingredient is it (vegetable, fruit, protein, etc). Meant to make searching easier.
-    private Set<String> tags;
 
     private String description;
 
@@ -48,14 +44,6 @@ public class Ingredient extends AbstractEntity{
 
     public void setUnit(String unit) {
         this.unit = unit;
-    }
-
-    public Set<String> getTags() {
-        return tags;
-    }
-
-    public void setTags(Set<String> tags) {
-        this.tags = tags;
     }
 
     public String getDescription() {
