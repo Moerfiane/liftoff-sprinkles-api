@@ -1,5 +1,6 @@
 package org.launchcode.sprinklespre.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
@@ -12,6 +13,7 @@ import java.util.Set;
 public class Module extends AbstractEntity{
 
     @ManyToOne
+    @JsonManagedReference
     private Course course;
 
     @ManyToMany
@@ -24,6 +26,12 @@ public class Module extends AbstractEntity{
     private Set<String> tags;
 
     boolean isCompleted;
+    //TODO: Add title
+    //TODO: Add description
+    //TODO: Add tools - model after skills
+    //TODO: Add ingredients - model after skills
+    //TODO: Add notes - ArrayList
+    //TODO: Add steps - ArrayList
 
     public Module() {}
 
