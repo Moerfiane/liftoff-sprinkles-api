@@ -9,11 +9,7 @@ import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
-//TODO: Add title
-//TODO: Add description
 //TODO: Consider how best to add image url: where will this be stored, how will it be accessed?
-//TODO: Add difficulty (enum?)
-//TODO: Add cuisine (e.g., vegetarian, gluten-free) - model after skills
 @Entity
 public class Course extends AbstractEntity{
 

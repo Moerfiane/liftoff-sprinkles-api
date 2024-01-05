@@ -14,7 +14,6 @@ import java.util.Set;
 public class Module extends AbstractEntity{
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @ManyToOne
     @JsonManagedReference
     private Course course;
 
@@ -28,10 +27,7 @@ public class Module extends AbstractEntity{
     private Set<String> tags;
 
     boolean isCompleted;
-    //TODO: Add title
     //TODO: Add description
-    //TODO: Add tools - model after skills
-    //TODO: Add ingredients - model after skills
     //TODO: Add notes - ArrayList
     //TODO: Add steps - ArrayList
 
