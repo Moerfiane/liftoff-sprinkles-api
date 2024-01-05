@@ -1,6 +1,7 @@
 package org.launchcode.sprinklespre.models;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -9,6 +10,9 @@ import java.util.List;
 
 @Entity
 public class User extends AbstractEntity{
+    @ManyToMany(mappedBy ="users")
+    private List<Course> courses = new ArrayList<>();
+
 
     @NotNull
     private String username;
@@ -20,12 +24,15 @@ public class User extends AbstractEntity{
 
     private List<Module> completedModules = new ArrayList<>();
 
+
     public User() {}
 
     public User(String username, String password) {
+        super();
         this.username = username;
         this.pwHash = encoder.encode(password);
     }
+    // Existing getters and setters
 
     public String getUsername() {
         return username;
@@ -51,4 +58,20 @@ public class User extends AbstractEntity{
 
         return numberofCompletedModules / course.getTotalModules() * 100;
     }
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
+
+    public boolean enrollInCourse(Course course) {
+        if(!this.courses.contains(course)) {
+            this.courses.add(course);
+            return true;
+        }
+        return false;
+    }
+
 }
