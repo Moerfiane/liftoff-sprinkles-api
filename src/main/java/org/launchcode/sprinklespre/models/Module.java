@@ -12,7 +12,6 @@ public class Module extends AbstractEntity{
     private Course course;
 
     boolean isCompleted;
-    //TODO: Add title
     //TODO: Add description
     //TODO: Add tools - model after skills
     //TODO: Add ingredients - model after skills

@@ -12,6 +12,8 @@ public class CourseFormDTO {
     @NotBlank
     private String courseDescription;
 
+    private Integer courseDifficulty;
+
     public String getCourseTitle() {
         return courseTitle;
     }
@@ -28,8 +30,17 @@ public class CourseFormDTO {
         this.courseDescription = courseDescription;
     }
 
+    public Integer getCourseDifficulty() {
+        return courseDifficulty;
+    }
+
+    public void setCourseDifficulty(Integer courseDifficulty) {
+        this.courseDifficulty = courseDifficulty;
+    }
+
     @Override public String toString() {
         return "CourseFormDTO: " +
                 "title: " + courseTitle +
-                "description: " + courseDescription;}
+                "description: " + courseDescription +
+                "difficulty: " + courseDifficulty;}
 }

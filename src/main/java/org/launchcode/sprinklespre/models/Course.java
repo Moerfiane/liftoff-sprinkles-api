@@ -16,11 +16,6 @@ import java.util.List;
 //TODO: Add cuisine (e.g., vegetarian, gluten-free) - model after skills
 @Entity
 public class Course extends AbstractEntity{
-    @Size(min=0, max=100)
-    private String title;
-    @Size(min=0, max=1000)
-    private String description;
-
 
     @OneToMany
     @JoinColumn(name = "course_id")
@@ -29,6 +24,12 @@ public class Course extends AbstractEntity{
 
     @ManyToMany
     private List<User> users = new ArrayList<>();
+
+    @Size(min=0, max=1000)
+    private String description;
+
+    //How difficult is the course (1-beginner, 2-intermediate, 3-advanced)
+    private Integer difficulty;
 
     public Course() {}
 
@@ -39,15 +40,6 @@ public class Course extends AbstractEntity{
     }
 
     // Getters and setters
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -75,6 +67,14 @@ public class Course extends AbstractEntity{
     // Course progress based on how many completed modules vs how many total in course
     public int getTotalModules() {
         return modules.size();
+    }
+
+    public Integer getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(Integer difficulty) {
+        this.difficulty = difficulty;
     }
 
     public boolean enrollUser(User user) {

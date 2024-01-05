@@ -103,18 +103,17 @@ public class CourseController {
             return ResponseEntity.ok(courseFormDTO);
     }
 
-    //TODO: bypass via whitelist so i can start testing/adding data
+    //Done: bypass via whitelist so i can start testing/adding data
     //TODO: undo whitelist once Suka gets login working
     //TODO: Reconstruct using abstract entity methods - need to delete unncessary fields
     @PostMapping("/create")
     @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, methods = {RequestMethod.POST} )
     public ResponseEntity<?> processAddCourseForm(@RequestBody CourseFormDTO courseFormDTO){
+        //using blank constructor because current constructor takes users and modules
         Course newCourse = new Course();
         newCourse.setName(courseFormDTO.getCourseTitle());
         newCourse.setDescription(courseFormDTO.getCourseDescription());
-        //debugging
-        String value = courseFormDTO.toString();
-        System.out.println(value);
+        newCourse.setDifficulty(courseFormDTO.getCourseDifficulty());
         courseRepository.save(newCourse);
         return ResponseEntity.ok(Map.of("success", true, "message", "Course maybe created"));
     }
