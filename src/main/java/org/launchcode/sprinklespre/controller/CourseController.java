@@ -6,16 +6,22 @@ import org.launchcode.sprinklespre.models.Course;
 import org.launchcode.sprinklespre.models.User;
 import org.launchcode.sprinklespre.models.data.CourseRepository;
 import org.launchcode.sprinklespre.models.data.UserRepository;
+import org.launchcode.sprinklespre.models.dto.CourseFormDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-@Controller
+
+
+@RestController
+@CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, methods = {RequestMethod.POST})
 @RequestMapping("/courses")
 public class CourseController {
 
@@ -27,52 +33,83 @@ public class CourseController {
 
     @Autowired
     AuthenticationController authenticationController;
+    private static final String userSessionKey = "user";
 
     @GetMapping
-    public String listCourses(Model model) {
-        model.addAttribute("courses", courseRepository.findAll());
-        return "courses/index";
+    public ResponseEntity<?> listCourses() {
+        List<Course> courses = (List<Course>) courseRepository.findAll();
+        return new ResponseEntity<>(courses, HttpStatus.OK);
     }
 
+//    public User getUserFromSession(HttpSession session) {
+//        Integer userId = (Integer) session.getAttribute(userSessionKey);
+//        if (userId == null) {
+//            return null;
+//        }
+//
+//        Optional<User> user = userRepository.findById(userId);
+//
+//        if (user.isEmpty()) {
+//            return null;
+//        }
+//
+//        return user.get();
+//    }
     @GetMapping("/view/{courseId}")
-    public String viewCourse(@PathVariable Integer courseId, Model model) {
-        Course course = courseRepository.findById(courseId).orElse(null);
-        if (course == null) {
-            return "redirect:/courses";
+    public ResponseEntity<?> viewCourse(@PathVariable Integer courseId) {
+        Optional<Course> courseOptional = courseRepository.findById(courseId);
+        if (courseOptional.isPresent()){
+            return new ResponseEntity<>(courseOptional.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        model.addAttribute("course", course);
-        return "courses/view";
     }
 
-    @PostMapping("/enroll/{courseId}")
-    public String enrollInACourse(@PathVariable Integer courseId, HttpServletRequest request, Model model) {
-        HttpSession session = request.getSession();
-        User user = authenticationController.getUserFromSession(session);
-        if (user == null) {
-            return "redirect:/login";
-        }
+    //TODO: Update to ResponseEntity
+//    @PostMapping("/enroll/{courseId}")
+//    public String enrollInACourse(@PathVariable Integer courseId, HttpServletRequest request, Model model) {
+//        HttpSession session = request.getSession();
+//        User user = authenticationController.getUserFromSession(session);
+//        if (user == null) {
+//            return "redirect:/login";
+//        }
+//
+//        Optional<Course> optionalCourse = courseRepository.findById(courseId);
+//        if (optionalCourse.isEmpty()) {
+//            model.addAttribute("enrollmentError", "Course was not found.");
+//            return "redirect:/courses";
+//        }
+//
+//        Course course = optionalCourse.get();
+//
+//        if (course.getUsers().contains(user)) {
+//            model.addAttribute("enrollmentError", "You are already enrolled in this course.");
+//            return "courses/view";
+//        }
+//
+//        course.getUsers().add(user);
+//        courseRepository.save(course);
+//
+//        user.getCourses().add(course);
+//        userRepository.save(user);
+//
+//        return "courses/enroll";
+//
+//    }
 
-        Optional<Course> optionalCourse = courseRepository.findById(courseId);
-        if (optionalCourse.isEmpty()) {
-            model.addAttribute("enrollmentError", "Course was not found.");
-            return "redirect:/courses";
-        }
+    @GetMapping("/create")
+    public ResponseEntity<?> displayCourseForm(HttpServletRequest request) {
+            CourseFormDTO courseFormDTO = new CourseFormDTO();
+            return ResponseEntity.ok(courseFormDTO);
+    }
 
-        Course course = optionalCourse.get();
+    //TODO: bypass via whitelist so i can start testing/adding data
+    //TODO: undo whitelist once Suka gets login working
+    @PostMapping("/create")
+    @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, methods = {RequestMethod.POST} )
+    public ResponseEntity<?> processAddCourseForm(@RequestBody CourseFormDTO CourseFormDTO){
 
-        if (course.getUsers().contains(user)) {
-            model.addAttribute("enrollmentError", "You are already enrolled in this course.");
-            return "courses/view";
-        }
-
-        course.getUsers().add(user);
-        courseRepository.save(course);
-
-        user.getCourses().add(course);
-        userRepository.save(user);
-
-        return "courses/enroll";
-
+        return ResponseEntity.ok(Map.of("success", true, "message", "User registered successfully"));
     }
 
     @PostMapping("/unenroll/{courseId}")
@@ -105,3 +142,5 @@ public class CourseController {
         return "redirect:/courses";
     }
 }
+
+

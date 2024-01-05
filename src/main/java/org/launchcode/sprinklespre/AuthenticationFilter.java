@@ -30,12 +30,14 @@ public class AuthenticationFilter implements HandlerInterceptor {
         return false;
     }
     @Override
+    //TODO: Send some calls to see when/how this is being called
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response,
                              Object handler) throws IOException {
         // Don't require sign-in for whitelisted pages
         if (isWhitelisted(request.getRequestURI())) {
             // returning true indicates that the request may proceed
+            System.out.println("Path is whitelisted");
             return true;
         }
 
@@ -45,6 +47,7 @@ public class AuthenticationFilter implements HandlerInterceptor {
 
         // The user is logged in
         if (user != null) {
+            System.out.println("User is logged in");
             return true;
         }
 
