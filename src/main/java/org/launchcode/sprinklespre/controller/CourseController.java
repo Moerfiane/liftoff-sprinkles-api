@@ -35,6 +35,7 @@ public class CourseController {
     AuthenticationController authenticationController;
     private static final String userSessionKey = "user";
 
+    //TODO: Complete display listCourses
     @GetMapping
     public ResponseEntity<?> listCourses() {
         List<Course> courses = (List<Course>) courseRepository.findAll();

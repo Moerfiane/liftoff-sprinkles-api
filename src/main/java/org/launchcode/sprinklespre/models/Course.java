@@ -17,8 +17,8 @@ import java.util.List;
 @Entity
 public class Course extends AbstractEntity{
 
-    @OneToMany
-    @JoinColumn(name = "course_id")
+    @OneToMany(mappedBy = "course")
+//    @JoinColumn(name = "course_id")
     @JsonManagedReference
     private List<Module> modules = new ArrayList<>();
 
