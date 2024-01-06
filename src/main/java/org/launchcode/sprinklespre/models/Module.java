@@ -9,6 +9,7 @@ import jakarta.persistence.ManyToOne;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 //TODO: Add title
@@ -18,14 +19,14 @@ import java.util.Set;
 //TODO: Add notes - ArrayList
 //TODO: Add steps - ArrayList
 @Entity
-public class Module extends AbstractEntity{
+public class Module extends AbstractEntity {
 
     @ManyToOne
     @JsonBackReference
     @JoinColumn(name="course_Id")
     private Course course;
 
-    //TODO: Add data types  for tools, ingredients, and tags
+    private String description;
     private String tools;
 
     private String ingredients;
@@ -41,10 +42,17 @@ public class Module extends AbstractEntity{
 
     public Module() {}
 
-    public Module(Course course) {
+    public Module(Course course, String description, String tools, String ingredients, String notes, String steps) {
+        super();
         this.course = course;
+        this.description = description;
+        this.tools = tools;
+        this.ingredients = ingredients;
+        this.notes = notes;
+        this.steps = steps;
         this.isCompleted = false;
     }
+
 
     void finishModule() {
         this.isCompleted = true;
@@ -58,6 +66,14 @@ public class Module extends AbstractEntity{
 
     public void setCourse(Course course) {
         this.course = course;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getTools() {
@@ -76,6 +92,29 @@ public class Module extends AbstractEntity{
         this.ingredients = ingredients;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getSteps() {
+        return steps;
+    }
+
+    public void setSteps(String steps) {
+        this.steps = steps;
+    }
 
     //NOTE: shouldn't completed modules be factored into user / course somehow? otherwise when it's marked completed it's marked for everyone
     public boolean isCompleted() {
@@ -85,4 +124,20 @@ public class Module extends AbstractEntity{
     public void setCompleted(boolean completed) {
         isCompleted = completed;
     }
+
+    @Override
+    public String toString() {
+        return "Module{" +
+                "id=" + getId() +
+                ", course=" + (course != null ? course.getId() : null) +
+                ", description='" + description + '\'' +
+                ", tools='" + tools + '\'' +
+                ", ingredients='" + ingredients + '\'' +
+                ", category='" + category + '\'' +
+                ", notes='" + notes + '\'' +
+                ", steps='" + steps + '\'' +
+                ", isCompleted=" + isCompleted +
+                '}';
+    }
+
 }

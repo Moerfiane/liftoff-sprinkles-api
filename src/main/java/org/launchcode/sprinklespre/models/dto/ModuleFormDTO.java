@@ -4,7 +4,8 @@ import org.launchcode.sprinklespre.models.Course;
 
 public class ModuleFormDTO {
     //TODO: Check that this should be Course data type and not courseId
-    private Course courseId;
+    private Integer courseId;
+    private String description;
 
     private String tools;
 
@@ -16,12 +17,20 @@ public class ModuleFormDTO {
 
     private String steps;
 
-    public Course getCourse() {
-        return course;
+    public Integer getCourseId() {
+        return courseId;
     }
 
-    public void setCourse(Course course) {
-        this.course = course;
+    public void setCourseId(Integer courseId) {
+        this.courseId = courseId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getTools() {
@@ -66,7 +75,7 @@ public class ModuleFormDTO {
 
     @Override public String toString() {
         return "ModuleFormDTO{" +
-                "course=" + course +
+                "course=" + courseId +
                 ", tools='" + tools + '\'' +
                 ", ingredients='" + ingredients + '\'' +
                 ", category='" + category + '\'' +
