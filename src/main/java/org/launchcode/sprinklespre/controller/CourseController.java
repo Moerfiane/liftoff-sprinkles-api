@@ -115,7 +115,7 @@ public class CourseController {
         newCourse.setDescription(courseFormDTO.getCourseDescription());
         newCourse.setDifficulty(courseFormDTO.getCourseDifficulty());
         courseRepository.save(newCourse);
-        return ResponseEntity.ok(Map.of("success", true, "message", "Course maybe created"));
+        return ResponseEntity.ok(Map.of("success", true, "message", "Course created", "courseId", newCourse.getId()));
     }
 
     @PostMapping("/unenroll/{courseId}")
