@@ -21,7 +21,7 @@ import java.util.Optional;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, methods = {RequestMethod.POST})
+@CrossOrigin(origins = "http://localhost:5173/courses", maxAge = 3600, methods = {RequestMethod.POST, RequestMethod.GET})
 @RequestMapping("/courses")
 public class CourseController {
 
@@ -37,9 +37,18 @@ public class CourseController {
 
     //TODO: Complete display listCourses
     @GetMapping
+    @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, methods = {RequestMethod.GET} )
     public ResponseEntity<?> listCourses() {
-        List<Course> courses = (List<Course>) courseRepository.findAll();
-        return new ResponseEntity<>(courses, HttpStatus.OK);
+        try {
+            System.out.println("Attempting to fetch all courses");
+            List<Course> courses = (List<Course>) courseRepository.findAll();
+            System.out.println("Fetched " + courses.size() + " courses");
+            return ResponseEntity.ok(courses);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("success", false, "message", "Error fetching courses"));
+        }
     }
 
 //    public User getUserFromSession(HttpSession session) {

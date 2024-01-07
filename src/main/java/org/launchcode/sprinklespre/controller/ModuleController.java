@@ -30,6 +30,10 @@ public class ModuleController {
         return ResponseEntity.ok(moduleFormDTO);
     }
 
+    //TODO: Check that course/module relationship is updated
+        //TODO: It's not! We need to addModules to course here
+    //TODO: add category
+
     @PostMapping("/create")
     @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, methods = {RequestMethod.POST} )
     public ResponseEntity<?> processAddCourseForm(@RequestBody ModuleFormDTO moduleFormDTO){
@@ -43,7 +47,8 @@ public class ModuleController {
                     moduleFormDTO.getIngredients(),
                     moduleFormDTO.getNotes(),
                     moduleFormDTO.getSteps()
-            );  System.out.println(newModule.toString());
+            );
+            moduleRepository.save(newModule);
             return ResponseEntity.ok(Map.of("success", true, "message", "Module created"));
         } else {
             return ResponseEntity.ok(Map.of("success", false, "message", "Module not created; not associated with a course"));
