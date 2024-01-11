@@ -4,13 +4,12 @@ import java.util.List;
 
 public class CourseProgressDTO {
     private String courseName;
-    private double progress;
+    private double courseProgress;
     private List<ModuleProgressDTO> moduleProgress;  // Include module progress information
 
-    public CourseProgressDTO(String courseName, double progress, List<ModuleProgressDTO> moduleProgress) {
+    public CourseProgressDTO(String courseName, double courseProgress) {
         this.courseName = courseName;
-        this.progress = progress;
-        this.moduleProgress = moduleProgress;
+        this.courseProgress = courseProgress;
     }
 
     // Getters and setters
@@ -23,12 +22,12 @@ public class CourseProgressDTO {
         this.courseName = courseName;
     }
 
-    public double getProgress() {
-        return progress;
+    public double getCourseProgress() {
+        return courseProgress;
     }
 
-    public void setProgress(double progress) {
-        this.progress = progress;
+    public void setCourseProgress(double courseProgress) {
+        this.courseProgress = courseProgress;
     }
 
     public List<ModuleProgressDTO> getModuleProgress() {
