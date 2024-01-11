@@ -1,19 +1,18 @@
 package org.launchcode.sprinklespre.models;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 public class Module extends AbstractEntity{
 
     @ManyToOne
-    @JsonManagedReference
+    @JsonBackReference
     private Course course;
 
     @ManyToMany
@@ -23,7 +22,7 @@ public class Module extends AbstractEntity{
     private List<Ingredient> ingredients = new ArrayList<>();
 
     // What category is the main ingredient in it (vegetable, fruit, protein, etc)? Meant to make searching easier.
-    private Set<String> tags;
+    private List<String> tags = new ArrayList<>();
 
     boolean isCompleted;
     //TODO: Add title
@@ -35,12 +34,15 @@ public class Module extends AbstractEntity{
 
     public Module() {}
 
-    public Module(Course course) {
+    public Module(Course course, List<Tool> tools, List<Ingredient> ingredients, List<String> tags) {
         this.course = course;
+        this.tools = tools;
+        this.ingredients = ingredients;
+        this.tags = tags;
         this.isCompleted = false;
     }
 
-    void finishModule() {
+    public void finishModule() {
         this.isCompleted = true;
     }
 
@@ -70,11 +72,11 @@ public class Module extends AbstractEntity{
         this.ingredients = ingredients;
     }
 
-    public Set<String> getTags() {
+    public List<String> getTags() {
         return tags;
     }
 
-    public void setTags(Set<String> tags) {
+    public void setTags(List<String> tags) {
         this.tags = tags;
     }
 }
