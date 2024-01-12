@@ -17,19 +17,21 @@ public class Module extends AbstractEntity {
 
     @ManyToOne
     @JsonBackReference
-    @JoinColumn(name="course_Id")
+//    @JoinColumn(name="course_Id")
     private Course course;
 
-    @ManyToMany
-    private List<Tool> tools = new ArrayList<>();
+    private String tools;
 
-    @ManyToMany
-    private List<Ingredient> ingredients = new ArrayList<>();
+    private String ingredients;
 
     private String description;
 
     // What category is the main ingredient in it (vegetable, fruit, protein, etc)? Meant to make searching easier.
-    private Set<String> tags;
+//    private String category;
+
+    private String notes;
+
+    private String steps;
 
     boolean isCompleted;
     //TODO: Add title
@@ -41,13 +43,13 @@ public class Module extends AbstractEntity {
 
     public Module() {}
 
-    public Module(Course course, String description, List<Tool> tools, List<Ingredient> ingredients, List<String> tags) {
+    public Module(Course course, String description, String tools, String ingredients, String notes, String steps) {
         this.course = course;
         this.description = description;
         this.tools = tools;
         this.ingredients = ingredients;
-        this.tags = (Set<String>) tags;
-        this.isCompleted = false;
+        this.notes = notes;
+        this.steps = steps;
     }
 
     public void finishModule() {
@@ -72,27 +74,51 @@ public class Module extends AbstractEntity {
         this.description = description;
     }
 
-    public List<Tool> getTools() {
+    public String getTools() {
         return tools;
     }
 
-    public void setTools(List<Tool> tools) {
+    public void setTools(String tools) {
         this.tools = tools;
     }
 
-    public List<Ingredient> getIngredients() {
+    public String getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(List<Ingredient> ingredients) {
+    public void setIngredients(String ingredients) {
         this.ingredients = ingredients;
     }
 
-    public Set<String> getTags() {
-        return tags;
+//    public String getCategory() {
+//        return category;
+//    }
+//
+//    public void setCategory(String category) {
+//        this.category = category;
+//    }
+
+    public String getNotes() {
+        return notes;
     }
 
-    public void setTags(Set<String> tags) {
-        this.tags = tags;
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getSteps() {
+        return steps;
+    }
+
+    public void setSteps(String steps) {
+        this.steps = steps;
+    }
+
+    public boolean isCompleted() {
+        return isCompleted;
+    }
+
+    public void setCompleted(boolean completed) {
+        isCompleted = completed;
     }
 }

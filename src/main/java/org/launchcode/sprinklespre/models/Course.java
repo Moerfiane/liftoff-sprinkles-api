@@ -18,7 +18,7 @@ public class Course extends AbstractEntity{
 
 
     @OneToMany(mappedBy = "course")
-    @JoinColumn(name = "course_id")
+//    @JoinColumn(name = "course_id")
     @JsonManagedReference
     private List<Module> modules = new ArrayList<>();
 
