@@ -27,7 +27,7 @@ public class Module extends AbstractEntity {
     private String description;
 
     // What category is the main ingredient in it (vegetable, fruit, protein, etc)? Meant to make searching easier.
-//    private String category;
+    private String category;
 
     private String notes;
 
@@ -43,11 +43,12 @@ public class Module extends AbstractEntity {
 
     public Module() {}
 
-    public Module(Course course, String description, String tools, String ingredients, String notes, String steps) {
+    public Module(Course course, String description, String tools, String ingredients, String category, String notes, String steps) {
         this.course = course;
         this.description = description;
         this.tools = tools;
         this.ingredients = ingredients;
+        this.category = category;
         this.notes = notes;
         this.steps = steps;
     }
@@ -90,13 +91,13 @@ public class Module extends AbstractEntity {
         this.ingredients = ingredients;
     }
 
-//    public String getCategory() {
-//        return category;
-//    }
-//
-//    public void setCategory(String category) {
-//        this.category = category;
-//    }
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
     public String getNotes() {
         return notes;
