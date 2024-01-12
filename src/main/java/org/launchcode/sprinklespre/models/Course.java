@@ -17,7 +17,8 @@ import java.util.List;
 @Entity
 public class Course extends AbstractEntity{
 
-    @OneToMany
+
+    @OneToMany(mappedBy = "course")
     @JoinColumn(name = "course_id")
     @JsonManagedReference
     private List<Module> modules = new ArrayList<>();
@@ -48,6 +49,15 @@ public class Course extends AbstractEntity{
     }
 
     // Getters and setters
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public List<Module> getModules() {
         return modules;
     }
@@ -67,14 +77,6 @@ public class Course extends AbstractEntity{
     // Course progress based on how many completed modules vs how many total in course
     public int getTotalModules() {
         return modules.size();
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public Integer getDifficulty() {
