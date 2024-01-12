@@ -2,17 +2,22 @@ package org.launchcode.sprinklespre.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Entity
-public class Module extends AbstractEntity{
+public class Module extends AbstractEntity {
 
     @ManyToOne
     @JsonBackReference
+    @JoinColumn(name="course_Id")
     private Course course;
 
     @ManyToMany
@@ -21,8 +26,10 @@ public class Module extends AbstractEntity{
     @ManyToMany
     private List<Ingredient> ingredients = new ArrayList<>();
 
+    private String description;
+
     // What category is the main ingredient in it (vegetable, fruit, protein, etc)? Meant to make searching easier.
-    private List<String> tags = new ArrayList<>();
+    private Set<String> tags;
 
     boolean isCompleted;
     //TODO: Add title
@@ -34,11 +41,12 @@ public class Module extends AbstractEntity{
 
     public Module() {}
 
-    public Module(Course course, List<Tool> tools, List<Ingredient> ingredients, List<String> tags) {
+    public Module(Course course, String description, List<Tool> tools, List<Ingredient> ingredients, List<String> tags) {
         this.course = course;
+        this.description = description;
         this.tools = tools;
         this.ingredients = ingredients;
-        this.tags = tags;
+        this.tags = (Set<String>) tags;
         this.isCompleted = false;
     }
 
@@ -54,6 +62,14 @@ public class Module extends AbstractEntity{
 
     public void setCourse(Course course) {
         this.course = course;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public List<Tool> getTools() {
@@ -72,11 +88,11 @@ public class Module extends AbstractEntity{
         this.ingredients = ingredients;
     }
 
-    public List<String> getTags() {
+    public Set<String> getTags() {
         return tags;
     }
 
-    public void setTags(List<String> tags) {
+    public void setTags(Set<String> tags) {
         this.tags = tags;
     }
 }
