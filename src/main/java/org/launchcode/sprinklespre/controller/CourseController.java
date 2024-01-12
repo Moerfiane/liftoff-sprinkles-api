@@ -6,16 +6,22 @@ import org.launchcode.sprinklespre.models.Course;
 import org.launchcode.sprinklespre.models.User;
 import org.launchcode.sprinklespre.models.data.CourseRepository;
 import org.launchcode.sprinklespre.models.data.UserRepository;
+import org.launchcode.sprinklespre.models.dto.CourseFormDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-@Controller
+
+
+@RestController
+@CrossOrigin(origins = "http://localhost:5173/courses", maxAge = 3600, methods = {RequestMethod.POST, RequestMethod.GET})
 @RequestMapping("/courses")
 public class CourseController {
 
@@ -27,42 +33,68 @@ public class CourseController {
 
     @Autowired
     AuthenticationController authenticationController;
+    private static final String userSessionKey = "user";
 
+    //TODO: Complete display listCourses
     @GetMapping
-    public String listCourses(Model model) {
-        model.addAttribute("courses", courseRepository.findAll());
-        return "courses/index";
-    }
-
-    @GetMapping("/view/{courseId}")
-    public String viewCourse(@PathVariable Integer courseId, Model model) {
-        Course course = courseRepository.findById(courseId).orElse(null);
-        if (course == null) {
-            return "redirect:/courses";
+    @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, methods = {RequestMethod.GET} )
+    public ResponseEntity<?> listCourses() {
+        try {
+            System.out.println("Attempting to fetch all courses");
+            List<Course> courses = (List<Course>) courseRepository.findAll();
+            System.out.println("Fetched " + courses.size() + " courses");
+            return ResponseEntity.ok(courses);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("success", false, "message", "Error fetching courses"));
         }
-        model.addAttribute("course", course);
-        return "courses/view";
     }
 
+    //    public User getUserFromSession(HttpSession session) {
+//        Integer userId = (Integer) session.getAttribute(userSessionKey);
+//        if (userId == null) {
+//            return null;
+//        }
+//
+//        Optional<User> user = userRepository.findById(userId);
+//
+//        if (user.isEmpty()) {
+//            return null;
+//        }
+//
+//        return user.get();
+//    }
+    @GetMapping("/view/{courseId}")
+    public ResponseEntity<?> viewCourse(@PathVariable Integer courseId) {
+        Optional<Course> courseOptional = courseRepository.findById(courseId);
+        if (courseOptional.isPresent()){
+            return new ResponseEntity<>(courseOptional.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //TODO: Update to ResponseEntity
     @PostMapping("/enroll/{courseId}")
-    public String enrollInACourse(@PathVariable Integer courseId, HttpServletRequest request, Model model) {
+    public ResponseEntity<?> enrollInACourse(@PathVariable Integer courseId, HttpServletRequest request, Model model) {
         HttpSession session = request.getSession();
         User user = authenticationController.getUserFromSession(session);
         if (user == null) {
-            return "redirect:/login";
+            return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/login")).build();
         }
 
         Optional<Course> optionalCourse = courseRepository.findById(courseId);
         if (optionalCourse.isEmpty()) {
             model.addAttribute("enrollmentError", "Course was not found.");
-            return "redirect:/courses";
+            return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/courses")).build();
         }
 
         Course course = optionalCourse.get();
 
         if (course.getUsers().contains(user)) {
             model.addAttribute("enrollmentError", "You are already enrolled in this course.");
-            return "courses/view";
+            return ResponseEntity.ok("courses/view");
         }
 
         course.getUsers().add(user);
@@ -71,8 +103,28 @@ public class CourseController {
         user.getCourses().add(course);
         userRepository.save(user);
 
-        return "courses/enroll";
+        return ResponseEntity.ok("courses/enroll");
+    }
 
+    @GetMapping("/create")
+    public ResponseEntity<CourseFormDTO> displayCourseForm() {
+        CourseFormDTO courseFormDTO = new CourseFormDTO();
+        return ResponseEntity.ok(courseFormDTO);
+    }
+
+    //Done: bypass via whitelist so i can start testing/adding data
+    //TODO: undo whitelist once Suka gets login working
+    //TODO: Reconstruct using abstract entity methods - need to delete unncessary fields
+    @PostMapping("/create")
+    @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, methods = {RequestMethod.POST} )
+    public ResponseEntity<?> processAddCourseForm(@RequestBody CourseFormDTO courseFormDTO){
+        //using blank constructor because current constructor takes users and modules
+        Course newCourse = new Course();
+        newCourse.setName(courseFormDTO.getCourseTitle());
+        newCourse.setDescription(courseFormDTO.getCourseDescription());
+        newCourse.setDifficulty(courseFormDTO.getCourseDifficulty());
+        courseRepository.save(newCourse);
+        return ResponseEntity.ok(Map.of("success", true, "message", "Course created", "courseId", newCourse.getId()));
     }
 
     @PostMapping("/unenroll/{courseId}")
