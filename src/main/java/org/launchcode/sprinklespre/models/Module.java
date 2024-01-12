@@ -42,14 +42,7 @@ public class Module extends AbstractEntity {
 
     private String steps;
 
-    @ManyToMany
-    private List<Tool> tools = new ArrayList<>();
-
-    @ManyToMany
-    private List<Ingredient> ingredients = new ArrayList<>();
-
     // What category is the main ingredient in it (vegetable, fruit, protein, etc)? Meant to make searching easier.
-    private Set<String> tags;
 
     boolean isCompleted;
 
@@ -153,29 +146,4 @@ public class Module extends AbstractEntity {
                 '}';
     }
 
-}
-
-    public List<Tool> getTools() {
-        return tools;
-    }
-
-    public void setTools(List<Tool> tools) {
-        this.tools = tools;
-    }
-
-    public List<Ingredient> getIngredients() {
-        return ingredients;
-    }
-
-    public void setIngredients(List<Ingredient> ingredients) {
-        this.ingredients = ingredients;
-    }
-
-    public Set<String> getTags() {
-        return tags;
-    }
-
-    public void setTags(Set<String> tags) {
-        this.tags = tags;
-    }
 }
