@@ -17,21 +17,30 @@ import java.util.List;
 @Entity
 public class Course extends AbstractEntity{
 
+
     @OneToMany(mappedBy = "course")
-//    @JoinColumn(name = "course_id")
+    @JoinColumn(name = "course_id")
     @JsonManagedReference
     private List<Module> modules = new ArrayList<>();
 
     @ManyToMany
     private List<User> users = new ArrayList<>();
 
-    @Size(min=0, max=1000)
+    //Description of the course
     private String description;
 
     //How difficult is the course (1-beginner, 2-intermediate, 3-advanced)
     private Integer difficulty;
 
     public Course() {}
+
+    public Course(List<Module> modules, List<User> users, String description, Integer difficulty) {
+        super();
+        this.modules = modules;
+        this.users = users;
+        this.description = description;
+        this.difficulty = difficulty;
+    }
 
     public Course(List<Module> modules, List<User> someUsers) {
         super();
@@ -40,6 +49,7 @@ public class Course extends AbstractEntity{
     }
 
     // Getters and setters
+
     public String getDescription() {
         return description;
     }

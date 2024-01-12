@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
+
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 
@@ -18,6 +19,7 @@ import java.util.Set;
 //TODO: Add ingredients - model after skills
 //TODO: Add notes - ArrayList
 //TODO: Add steps - ArrayList
+
 @Entity
 public class Module extends AbstractEntity {
 
@@ -26,7 +28,9 @@ public class Module extends AbstractEntity {
     @JoinColumn(name="course_Id")
     private Course course;
 
+
     private String description;
+    
     private String tools;
 
     private String ingredients;
@@ -37,6 +41,15 @@ public class Module extends AbstractEntity {
     private String notes;
 
     private String steps;
+
+    @ManyToMany
+    private List<Tool> tools = new ArrayList<>();
+
+    @ManyToMany
+    private List<Ingredient> ingredients = new ArrayList<>();
+
+    // What category is the main ingredient in it (vegetable, fruit, protein, etc)? Meant to make searching easier.
+    private Set<String> tags;
 
     boolean isCompleted;
 
@@ -53,7 +66,6 @@ public class Module extends AbstractEntity {
         this.isCompleted = false;
     }
 
-
     void finishModule() {
         this.isCompleted = true;
     }
@@ -67,6 +79,7 @@ public class Module extends AbstractEntity {
     public void setCourse(Course course) {
         this.course = course;
     }
+
 
     public String getDescription() {
         return description;
@@ -140,4 +153,29 @@ public class Module extends AbstractEntity {
                 '}';
     }
 
+}
+
+    public List<Tool> getTools() {
+        return tools;
+    }
+
+    public void setTools(List<Tool> tools) {
+        this.tools = tools;
+    }
+
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public Set<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<String> tags) {
+        this.tags = tags;
+    }
 }
