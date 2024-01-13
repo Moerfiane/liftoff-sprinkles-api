@@ -1,6 +1,8 @@
 package org.launchcode.sprinklespre.models;
 
 import jakarta.persistence.Entity;
+
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -13,6 +15,9 @@ import java.util.List;
 
 @Entity
 public class User extends AbstractEntity{
+
+    @OneToMany(mappedBy = "createdBy")
+    private List<Review> reviews= new ArrayList<>();
 
     @ManyToMany(mappedBy ="users")
     private List<Course> courses = new ArrayList<>();
@@ -31,6 +36,12 @@ public class User extends AbstractEntity{
     @NotNull
     private String pwHash;
 
+    @NotNull
+    private String role;
+
+
+   // private boolean enabled = false;
+
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public User() {    }
@@ -38,7 +49,9 @@ public class User extends AbstractEntity{
     public User(String username, String password) {
         super();
         this.username = username;
+
         this.pwHash = encoder.encode(password);
+        this.role = "user";
     }
     // Getters and setters
 
@@ -48,6 +61,15 @@ public class User extends AbstractEntity{
 
     public boolean isMatchingPassword(String password) {
         return encoder.matches(password, pwHash);
+    }
+
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
     public List<Course> getCourses() {
         return courses;
