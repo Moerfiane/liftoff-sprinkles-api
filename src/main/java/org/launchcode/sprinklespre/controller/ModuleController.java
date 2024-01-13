@@ -46,6 +46,7 @@ public class ModuleController {
                     moduleFormDTO.getDescription(),
                     moduleFormDTO.getTools(),
                     moduleFormDTO.getIngredients(),
+                    moduleFormDTO.getCategory(),
                     moduleFormDTO.getNotes(),
                     moduleFormDTO.getSteps()
             );
