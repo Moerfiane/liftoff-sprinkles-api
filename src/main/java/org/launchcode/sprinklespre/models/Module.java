@@ -22,15 +22,12 @@ public class Module extends AbstractEntity {
 //    @JoinColumn(name="course_Id")
     private Course course;
 
-
     @Column(columnDefinition = "TEXT")
     private String description;
     @Column(columnDefinition = "TEXT")
     private String tools;
     @Column(columnDefinition = "TEXT")
     private String ingredients;
-
-    private String description;
 
     // What category is the main ingredient in it (vegetable, fruit, protein, etc)? Meant to make searching easier.
     private String category;
