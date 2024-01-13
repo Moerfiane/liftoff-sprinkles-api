@@ -13,8 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -45,6 +43,7 @@ public class CourseController {
             List<Course> courses = (List<Course>) courseRepository.findAll();
             System.out.println("Fetched " + courses.size() + " courses");
             return ResponseEntity.ok(courses);
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -52,7 +51,7 @@ public class CourseController {
         }
     }
 
-    //    public User getUserFromSession(HttpSession session) {
+//    public User getUserFromSession(HttpSession session) {
 //        Integer userId = (Integer) session.getAttribute(userSessionKey);
 //        if (userId == null) {
 //            return null;
@@ -66,6 +65,7 @@ public class CourseController {
 //
 //        return user.get();
 //    }
+    @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, methods = {RequestMethod.GET} )
     @GetMapping("/view/{courseId}")
     public ResponseEntity<?> viewCourse(@PathVariable Integer courseId) {
         Optional<Course> courseOptional = courseRepository.findById(courseId);
@@ -75,7 +75,6 @@ public class CourseController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
     @GetMapping("/enroll")
     public ResponseEntity<EnrollDTO> displayEnroll() {
         System.out.println("Setting DTO");
@@ -124,8 +123,8 @@ public class CourseController {
 
     @GetMapping("/create")
     public ResponseEntity<CourseFormDTO> displayCourseForm() {
-        CourseFormDTO courseFormDTO = new CourseFormDTO();
-        return ResponseEntity.ok(courseFormDTO);
+            CourseFormDTO courseFormDTO = new CourseFormDTO();
+            return ResponseEntity.ok(courseFormDTO);
     }
 
     //Done: bypass via whitelist so i can start testing/adding data
@@ -173,3 +172,5 @@ public class CourseController {
         return "redirect:/courses";
     }
 }
+
+

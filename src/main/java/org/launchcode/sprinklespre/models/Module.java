@@ -2,9 +2,9 @@ package org.launchcode.sprinklespre.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
-
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 
@@ -25,42 +25,38 @@ public class Module extends AbstractEntity {
 
     @ManyToOne
     @JsonBackReference
-    @JoinColumn(name="course_Id")
+    @JoinColumn(name = "course_Id")
     private Course course;
-
-
+    @Column(columnDefinition = "TEXT")
     private String description;
-
+    @Column(columnDefinition = "TEXT")
     private String tools;
-
+    @Column(columnDefinition = "TEXT")
     private String ingredients;
 
     // What category is the main ingredient in it (vegetable, fruit, protein, etc)? Meant to make searching easier.
     private String category;
-
+    @Column(columnDefinition = "TEXT")
     private String notes;
-
+    @Column(columnDefinition = "TEXT")
     private String steps;
-
-    // What category is the main ingredient in it (vegetable, fruit, protein, etc)? Meant to make searching easier.
-    private Set<String> tags;
 
     boolean isCompleted;
 
-    public Module() {}
+    public Module() {
+    }
 
-    public Module(Course course, String description, String tools, String ingredients, String notes, String steps) {
-        super();
+    public Module(Course course, String description, String tools, String ingredients, String category, String notes, String steps) {
         this.course = course;
         this.description = description;
         this.tools = tools;
         this.ingredients = ingredients;
+        this.category = category;
         this.notes = notes;
         this.steps = steps;
-        this.isCompleted = false;
     }
 
-    void finishModule() {
+    public void finishModule() {
         this.isCompleted = true;
     }
 
@@ -73,7 +69,6 @@ public class Module extends AbstractEntity {
     public void setCourse(Course course) {
         this.course = course;
     }
-
 
     public String getDescription() {
         return description;
@@ -146,5 +141,4 @@ public class Module extends AbstractEntity {
                 ", isCompleted=" + isCompleted +
                 '}';
     }
-
 }

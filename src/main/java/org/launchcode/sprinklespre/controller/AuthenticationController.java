@@ -1,31 +1,33 @@
 package org.launchcode.sprinklespre.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
+//import jakarta.mail.MessagingException;
+//import jakarta.mail.internet.MimeMessage;
+
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import org.launchcode.sprinklespre.models.User;
 import org.launchcode.sprinklespre.models.data.UserRepository;
 import org.launchcode.sprinklespre.models.dto.LoginFormDTO;
 import org.launchcode.sprinklespre.models.dto.RegisterFormDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import java.util.Map;
 
+import java.util.Map;
 import java.util.Optional;
 
+
 @RestController
-@CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class AuthenticationController {
     @Autowired
     UserRepository userRepository;
+
+    //@Autowired
+    //public  JavaMailSender mailSender;
+
     private static final String userSessionKey = "user";
 
 
-//how do we use this
     public User getUserFromSession(HttpSession session) {
         Integer userId = (Integer) session.getAttribute(userSessionKey);
         if (userId == null) {
@@ -47,8 +49,6 @@ public class AuthenticationController {
         return ResponseEntity.ok(registerFormDTO);
     }
 
-
-
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody RegisterFormDTO registerFormDTO) {
 
@@ -63,17 +63,45 @@ public class AuthenticationController {
         if (!password.equals(verifyPassword)) {
             return ResponseEntity.ok(Map.of("success", false, "message", "Passwords do not match"));
         }
+
+        //String randomCode = generateRandomVerificationCode(); // Generate verification code
         User newUser = new User(registerFormDTO.getUsername(), registerFormDTO.getPassword());
+        newUser.setRole(registerFormDTO.getRole());
         userRepository.save(newUser);
+
+
+
+//        try {
+//            sendVerificationEmail(newUser, "http://localhost:8080");
+//        } catch (MessagingException | UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//            // Handle the exception, e.g., return an error response
+//        }
+
         //setUserInSession(request.getSession(), newUser);
         return ResponseEntity.ok(Map.of("success", true, "message", "User registered successfully"));
 
     }
+
+//    @GetMapping("/verify")
+//    public String verifyUser(@RequestParam("code") String code) {
+//        User user = userRepository.findByVerificationCode(code);
+//        if (user == null || user.isEnabled()) {
+//            return "Verification failed";
+//        }
+//        user.setVerificationCode(null);
+//        user.setEnabled(true);
+//        userRepository.save(user);
+//        return "Account verified successfully";
+//    }
+
+
     @GetMapping("/login")
     public ResponseEntity<LoginFormDTO> displayLoginForm() {
         LoginFormDTO loginFormDTO = new LoginFormDTO();
         return ResponseEntity.ok(loginFormDTO);
     }
+
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginFormDTO loginFormDTO) {
 
@@ -89,12 +117,15 @@ public class AuthenticationController {
         if (!theUser.isMatchingPassword(password)) {
             return ResponseEntity.badRequest().body("Invalid password");
         }
-//Was not receiving success message on front end
-       return ResponseEntity.ok(Map.of("success", true, "message", "User registered successfully"));
+
+        return ResponseEntity.ok(Map.of("success", true, "message", "User registered successfully", "userId", theUser.getId(), "role", theUser.getRole()));
+
     }
+
     @GetMapping("/logout")
     public ResponseEntity<?> logout() {
-
+        //request.getSession().invalidate();
         return ResponseEntity.ok("Logout successful");
     }
+
 }

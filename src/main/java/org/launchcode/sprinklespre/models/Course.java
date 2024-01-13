@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +16,9 @@ import java.util.List;
 @Entity
 public class Course extends AbstractEntity{
 
-    @OneToMany
-    @JoinColumn(name = "course_id")
+
+    @OneToMany(mappedBy = "course")
+//    @JoinColumn(name = "course_id")
     @JsonManagedReference
     private List<Module> modules = new ArrayList<>();
 
@@ -33,21 +33,29 @@ public class Course extends AbstractEntity{
 
     public Course() {}
 
-    public Course(List<Module> modules, List<User> users, String description, Integer difficulty) {
+    public Course(List<Module> modules, String description, Integer difficulty) {
         super();
         this.modules = modules;
-        this.users = users;
         this.description = description;
         this.difficulty = difficulty;
     }
 
-    public Course(List<Module> modules, List<User> someUsers) {
-        super();
-        this.modules = modules;
-        this.users.addAll(someUsers);
-    }
+//    public Course(List<Module> modules, List<User> someUsers) {
+//        super();
+//        this.modules = modules;
+//        this.users.addAll(someUsers);
+//    }
 
     // Getters and setters
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public List<Module> getModules() {
         return modules;
     }
@@ -69,14 +77,6 @@ public class Course extends AbstractEntity{
         return modules.size();
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public Integer getDifficulty() {
         return difficulty;
     }
@@ -85,12 +85,12 @@ public class Course extends AbstractEntity{
         this.difficulty = difficulty;
     }
 
-    public boolean enrollUser(User user) {
-        if (!this.users.contains((user))) {
-            this.users.add(user);
-            return true;
-        }
-        return false;
-    }
+//    public boolean enrollUser(User user) {
+//        if (!this.users.contains((user))) {
+//            this.users.add(user);
+//            return true;
+//        }
+//        return false;
+//    }
 
 }
