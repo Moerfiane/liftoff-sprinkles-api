@@ -1,9 +1,13 @@
 package org.launchcode.sprinklespre.models;
 
 import jakarta.persistence.Entity;
+
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.validation.constraints.NotNull;
+import org.launchcode.sprinklespre.models.dto.CourseProgressDTO;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
@@ -11,10 +15,20 @@ import java.util.List;
 
 @Entity
 public class User extends AbstractEntity{
+
     @OneToMany(mappedBy = "createdBy")
     private List<Review> reviews= new ArrayList<>();
+
     @ManyToMany(mappedBy ="users")
     private List<Course> courses = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_completed_modules",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "module_id")
+    )
+    private List<Module>completedModulesList = new ArrayList<>();
 
     @NotNull
     private String username;
@@ -30,7 +44,7 @@ public class User extends AbstractEntity{
 
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    public User() {}
+    public User() {    }
 
     public User(String username, String password) {
         super();
@@ -39,7 +53,7 @@ public class User extends AbstractEntity{
         this.pwHash = encoder.encode(password);
         this.role = "user";
     }
-    // Existing getters and setters
+    // Getters and setters
 
     public String getUsername() {
         return username;
@@ -71,6 +85,35 @@ public class User extends AbstractEntity{
             return true;
         }
         return false;
+    }
+
+    // Method to mark a module as completed by the user
+    void completeModule(Module module) {
+
+        if (!module.isCompleted) {
+            module.finishModule();
+            completedModulesList.add(module);
+        }
+    }
+
+    // Method to get the user's progress in a course
+    double getProgress(Course course) {
+        return (double) completedModulesList.size() / course.getTotalModules() * 100;
+    }
+
+    public List<CourseProgressDTO> getCourseProgressForUser(User user) {
+
+        List<Course> userCourses = user.getCourses();
+        List<CourseProgressDTO> progressList = new ArrayList<>();
+
+
+        for (Course course : userCourses) {
+            double progress = getProgress(course);
+
+            progressList.add(new CourseProgressDTO(course.getName(), progress));
+        }
+
+        return progressList;
     }
 
 }
