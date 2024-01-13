@@ -122,4 +122,20 @@ public class Module extends AbstractEntity {
     public void setCompleted(boolean completed) {
         isCompleted = completed;
     }
+
+    @Override
+    public String toString() {
+        return "Module{" +
+                "id=" + getId() +
+                ", course=" + (course != null ? course.getId() : null) +
+                ", description='" + description + '\'' +
+                ", tools='" + tools + '\'' +
+                ", ingredients='" + ingredients + '\'' +
+                ", category='" + category + '\'' +
+                ", notes='" + notes + '\'' +
+                ", steps='" + steps + '\'' +
+                ", isCompleted=" + isCompleted +
+                '}';
+    }
+
 }
