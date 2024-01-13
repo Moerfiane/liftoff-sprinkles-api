@@ -76,17 +76,27 @@ public class CourseController {
         }
     }
 
+    @GetMapping("/enroll")
+    public ResponseEntity<EnrollDTO> displayEnroll() {
+        System.out.println("Setting DTO");
+        EnrollDTO enrollDTO = new EnrollDTO();
+        return ResponseEntity.ok(enrollDTO);
+    }
+
     //TODO: Update to ResponseEntity
-    @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, methods = {RequestMethod.POST} )
+    @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, methods = {RequestMethod.POST, RequestMethod.OPTIONS} )
     @PostMapping("/enroll")
     public ResponseEntity<?> enrollInACourse(@RequestBody EnrollDTO enrollDTO) {
+        System.out.println("Attemtping to enroll");
         Integer courseId = enrollDTO.getCourseId();
         Integer userId = enrollDTO.getUserId();
+        System.out.println("courseId:" + courseId);
+        System.out.println("userId:" + userId);
 
         // Fetch the user and course from the database
         Optional<User> userOpt = userRepository.findById(userId);
         Optional<Course> courseOpt = courseRepository.findById(courseId);
-
+        //make sure front end can receive the response type.
         if (userOpt.isEmpty() || courseOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User or Course not found");
         }
@@ -94,15 +104,17 @@ public class CourseController {
         User user = userOpt.get();
         Course course = courseOpt.get();
 
+        //make sure front end can receive response
         // Check if user is already enrolled
         if (course.getUsers().contains(user)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User already enrolled in the course");
         }
-
+        System.out.println("course.getUsers: " + course.getUsers());
         // Perform the enrollment
         course.getUsers().add(user);
+        System.out.println("course.getUsers: " + course.getUsers());
         courseRepository.save(course);
-
+        System.out.println("course.getUsers: " + course.getUsers());
         user.getCourses().add(course);
         userRepository.save(user);
 
