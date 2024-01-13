@@ -7,6 +7,7 @@ import org.launchcode.sprinklespre.models.User;
 import org.launchcode.sprinklespre.models.data.CourseRepository;
 import org.launchcode.sprinklespre.models.data.UserRepository;
 import org.launchcode.sprinklespre.models.dto.CourseFormDTO;
+import org.launchcode.sprinklespre.models.dto.EnrollDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -76,34 +77,37 @@ public class CourseController {
     }
 
     //TODO: Update to ResponseEntity
-    @PostMapping("/enroll/{courseId}")
-    public ResponseEntity<?> enrollInACourse(@PathVariable Integer courseId, HttpServletRequest request, Model model) {
-        HttpSession session = request.getSession();
-        User user = authenticationController.getUserFromSession(session);
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/login")).build();
+    @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, methods = {RequestMethod.POST} )
+    @PostMapping("/enroll")
+    public ResponseEntity<?> enrollInACourse(@RequestBody EnrollDTO enrollDTO) {
+        Integer courseId = enrollDTO.getCourseId();
+        Integer userId = enrollDTO.getUserId();
+
+        // Fetch the user and course from the database
+        Optional<User> userOpt = userRepository.findById(userId);
+        Optional<Course> courseOpt = courseRepository.findById(courseId);
+
+        if (userOpt.isEmpty() || courseOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User or Course not found");
         }
 
-        Optional<Course> optionalCourse = courseRepository.findById(courseId);
-        if (optionalCourse.isEmpty()) {
-            model.addAttribute("enrollmentError", "Course was not found.");
-            return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/courses")).build();
-        }
+        User user = userOpt.get();
+        Course course = courseOpt.get();
 
-        Course course = optionalCourse.get();
-
+        // Check if user is already enrolled
         if (course.getUsers().contains(user)) {
-            model.addAttribute("enrollmentError", "You are already enrolled in this course.");
-            return ResponseEntity.ok("courses/view");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User already enrolled in the course");
         }
 
+        // Perform the enrollment
         course.getUsers().add(user);
         courseRepository.save(course);
 
         user.getCourses().add(course);
         userRepository.save(user);
 
-        return ResponseEntity.ok("courses/enroll");
+        // Return a success response
+        return ResponseEntity.ok("Enrolled successfully in course " + course.getName());
     }
 
     @GetMapping("/create")
