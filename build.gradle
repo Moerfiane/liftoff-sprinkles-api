@@ -13,6 +13,7 @@ repositories {
 }
 
 dependencies {
+    //JPA contains ORM code
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-validation'

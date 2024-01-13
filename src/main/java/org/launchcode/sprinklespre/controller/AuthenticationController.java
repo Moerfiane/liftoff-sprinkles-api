@@ -26,6 +26,7 @@ public class AuthenticationController {
 
     private static final String userSessionKey = "user";
 
+
     public User getUserFromSession(HttpSession session) {
         Integer userId = (Integer) session.getAttribute(userSessionKey);
         if (userId == null) {
@@ -50,13 +51,11 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody RegisterFormDTO registerFormDTO) {
 
-
         User existingUser = userRepository.findByUsername(registerFormDTO.getUsername());
 
         if (existingUser != null) {
             return ResponseEntity.ok(Map.of("success", false, "message", "User already exists"));
         }
-
 
         String password = registerFormDTO.getPassword();
         String verifyPassword = registerFormDTO.getVerifyPassword();
@@ -119,6 +118,7 @@ public class AuthenticationController {
         }
 
         return ResponseEntity.ok(Map.of("success", true, "message", "User registered successfully", "userId", theUser.getId(), "role", theUser.getRole()));
+
     }
 
     @GetMapping("/logout")
