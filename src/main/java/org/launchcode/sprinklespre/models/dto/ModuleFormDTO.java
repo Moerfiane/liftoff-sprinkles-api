@@ -5,6 +5,7 @@ import org.launchcode.sprinklespre.models.Course;
 public class ModuleFormDTO {
     //TODO: Check that this should be Course data type and not courseId
     private Integer courseId;
+    private String name;
     private String description;
 
     private String tools;
@@ -23,6 +24,14 @@ public class ModuleFormDTO {
 
     public void setCourseId(Integer courseId) {
         this.courseId = courseId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {

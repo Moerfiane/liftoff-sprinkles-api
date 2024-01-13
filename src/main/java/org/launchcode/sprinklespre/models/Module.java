@@ -2,11 +2,7 @@ package org.launchcode.sprinklespre.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,18 +24,18 @@ public class Module extends AbstractEntity {
     @JoinColumn(name="course_Id")
     private Course course;
 
-
+    @Column(columnDefinition = "TEXT")
     private String description;
-    
+    @Column(columnDefinition = "TEXT")
     private String tools;
-
+    @Column(columnDefinition = "TEXT")
     private String ingredients;
 
     // What category is the main ingredient in it (vegetable, fruit, protein, etc)? Meant to make searching easier.
     private String category;
-
+    @Column(columnDefinition = "TEXT")
     private String notes;
-
+    @Column(columnDefinition = "TEXT")
     private String steps;
 
     // What category is the main ingredient in it (vegetable, fruit, protein, etc)? Meant to make searching easier.

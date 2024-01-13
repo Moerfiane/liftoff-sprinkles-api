@@ -37,6 +37,7 @@ public class ModuleController {
     @PostMapping("/create")
     @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, methods = {RequestMethod.POST} )
     public ResponseEntity<?> processAddCourseForm(@RequestBody ModuleFormDTO moduleFormDTO){
+        System.out.println("moduleFormDTO.getName():" + moduleFormDTO.getName());
         Optional<Course> optCourse = courseRepository.findById(moduleFormDTO.getCourseId());
         if(optCourse.isPresent()) {
             Course aCourse = (Course) optCourse.get();
@@ -48,6 +49,8 @@ public class ModuleController {
                     moduleFormDTO.getNotes(),
                     moduleFormDTO.getSteps()
             );
+            newModule.setName(moduleFormDTO.getName());
+            System.out.println("newModule.getName():" + newModule.getName());
             moduleRepository.save(newModule);
             return ResponseEntity.ok(Map.of("success", true, "message", "Module created"));
         } else {

@@ -40,9 +40,7 @@ public class CourseController {
     @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, methods = {RequestMethod.GET} )
     public ResponseEntity<?> listCourses() {
         try {
-            System.out.println("Attempting to fetch all courses");
             List<Course> courses = (List<Course>) courseRepository.findAll();
-            System.out.println("Fetched " + courses.size() + " courses");
             return ResponseEntity.ok(courses);
         } catch (Exception e) {
             e.printStackTrace();
@@ -65,6 +63,7 @@ public class CourseController {
 //
 //        return user.get();
 //    }
+    @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, methods = {RequestMethod.GET} )
     @GetMapping("/view/{courseId}")
     public ResponseEntity<?> viewCourse(@PathVariable Integer courseId) {
         Optional<Course> courseOptional = courseRepository.findById(courseId);

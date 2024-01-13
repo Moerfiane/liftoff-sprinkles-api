@@ -17,8 +17,9 @@ import java.util.Map;
 
 import java.util.Optional;
 
+
 @RestController
-@CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, methods = {RequestMethod.POST, RequestMethod.GET, RequestMethod.OPTIONS})
 public class AuthenticationController {
     @Autowired
     UserRepository userRepository;
