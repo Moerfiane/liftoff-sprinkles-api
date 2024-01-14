@@ -176,7 +176,6 @@ public class CourseController {
 
     @GetMapping("/favorite")
     public ResponseEntity<FavoriteDTO> displayFavoriteCourses() {
-        System.out.println("Setting DTO");
         FavoriteDTO favoriteDTO = new FavoriteDTO();
         return ResponseEntity.ok(favoriteDTO);
     }
