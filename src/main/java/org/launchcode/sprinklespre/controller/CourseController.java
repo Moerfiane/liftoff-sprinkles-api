@@ -174,7 +174,7 @@ public class CourseController {
 //        return "redirect:/courses";
 //    }
 
-    @GetMapping("/enroll")
+    @GetMapping("/favorite")
     public ResponseEntity<FavoriteDTO> displayFavoriteCourses() {
         System.out.println("Setting DTO");
         FavoriteDTO favoriteDTO = new FavoriteDTO();

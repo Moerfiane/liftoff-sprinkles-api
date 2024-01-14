@@ -31,6 +31,7 @@ public class User extends AbstractEntity{
         this.username = username;
         this.pwHash = encoder.encode(password);
         this.favoritedBy = new ArrayList<Course>();
+
     }
     // Existing getters and setters
 
