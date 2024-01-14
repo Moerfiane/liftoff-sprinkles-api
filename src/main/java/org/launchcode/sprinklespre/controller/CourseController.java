@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-
-
 @RestController
 @CrossOrigin(origins = "http://localhost:5173/courses", maxAge = 3600, methods = {RequestMethod.POST, RequestMethod.GET})
 @RequestMapping("/courses")
@@ -65,6 +63,7 @@ public class CourseController {
 //
 //        return user.get();
 //    }
+
     @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, methods = {RequestMethod.GET} )
     @GetMapping("/view/{courseId}")
     public ResponseEntity<?> viewCourse(@PathVariable Integer courseId) {
@@ -82,11 +81,11 @@ public class CourseController {
         return ResponseEntity.ok(enrollDTO);
     }
 
-    //TODO: Update to ResponseEntity
+    //Done: Update to ResponseEntity
     @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, methods = {RequestMethod.POST, RequestMethod.OPTIONS} )
     @PostMapping("/enroll")
     public ResponseEntity<?> enrollInACourse(@RequestBody EnrollDTO enrollDTO) {
-        System.out.println("Attemtping to enroll");
+        System.out.println("Attempting to enroll");
         Integer courseId = enrollDTO.getCourseId();
         Integer userId = enrollDTO.getUserId();
         System.out.println("courseId:" + courseId);
@@ -97,7 +96,7 @@ public class CourseController {
         Optional<Course> courseOpt = courseRepository.findById(courseId);
         //make sure front end can receive the response type.
         if (userOpt.isEmpty() || courseOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User or Course not found");
+            return ResponseEntity.ok(Map.of("success", false, "message", "User or course not found"));
         }
 
         User user = userOpt.get();
@@ -106,9 +105,11 @@ public class CourseController {
         //make sure front end can receive response
         // Check if user is already enrolled
         if (course.getUsers().contains(user)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User already enrolled in the course");
+            return ResponseEntity.ok(Map.of("success", false, "message", "User already enrolled in this course"));
         }
+
         System.out.println("course.getUsers: " + course.getUsers());
+
         // Perform the enrollment
         course.getUsers().add(user);
         System.out.println("course.getUsers: " + course.getUsers());
@@ -118,7 +119,7 @@ public class CourseController {
         userRepository.save(user);
 
         // Return a success response
-        return ResponseEntity.ok("Enrolled successfully in course " + course.getName());
+        return ResponseEntity.ok(Map.of("success", true, "message", "Enrolled successfully in course" + course.getName()));
     }
 
     @GetMapping("/create")
