@@ -19,6 +19,9 @@ public class User extends AbstractEntity{
     @NotNull
     private String pwHash;
 
+    @ManyToMany
+    private List<Course> favoritedBy = new ArrayList<Course>();
+
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public User() {}
@@ -27,6 +30,7 @@ public class User extends AbstractEntity{
         super();
         this.username = username;
         this.pwHash = encoder.encode(password);
+        this.favoritedBy = new ArrayList<Course>();
     }
     // Existing getters and setters
 
@@ -45,6 +49,14 @@ public class User extends AbstractEntity{
         this.courses = courses;
     }
 
+    public List<Course> getFavoritedBy() {
+        return favoritedBy;
+    }
+
+    public void setFavoritedBy(List<Course> favoritedBy) {
+        this.favoritedBy = favoritedBy;
+    }
+
     public boolean enrollInCourse(Course course) {
         if(!this.courses.contains(course)) {
             this.courses.add(course);
@@ -52,5 +64,17 @@ public class User extends AbstractEntity{
         }
         return false;
     }
+
+    public boolean addFavorite(Course user) {
+        if (!this.favoritedBy.contains(user)) {
+            this.favoritedBy.add(user);
+            return true;
+        }
+        return false;
+    }
+
+//    public boolean removeFavorite(User user) {
+//        return this.favoritedBy.remove(user);
+//    }
 
 }
