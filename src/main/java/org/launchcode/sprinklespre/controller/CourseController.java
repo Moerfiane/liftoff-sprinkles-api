@@ -188,26 +188,15 @@ public class CourseController {
 
         // Fetch the user and course from the database
         Optional<User> userOpt = userRepository.findById(userId);
-        Optional<Course> courseOpt = courseRepository.findById(courseId);
 
-        if (userOpt.isEmpty() || courseOpt.isEmpty()) {
-            return ResponseEntity.ok(Map.of("success", false, "message", "User or course not found"));
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.ok(Map.of("success", false, "message", "User not found"));
         }
 
         User user = userOpt.get();
-        Course course = courseOpt.get();
-
-        // Use addFavorite method to add the course to the user's favorite list
-        boolean isFavorited = user.addFavorite(course);
-        if (!isFavorited) {
-            return ResponseEntity.ok(Map.of("success", false, "message", "Course already favorited by this user"));
-        }
-
-        // Save the updated user entity
-        userRepository.save(user);
 
         // Return a success response
-        return ResponseEntity.ok(Map.of("success", true, "message", "Course favorited successfully: " + course.getName()));
+        return ResponseEntity.ok(Map.of("success", true, "message", "Course favorited successfully: " + user.getName()));
     }
 
 //    @PostMapping("/unfavorite/{courseId}")
