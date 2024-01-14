@@ -174,7 +174,7 @@ public class CourseController {
 //        return "redirect:/courses";
 //    }
 
-    @GetMapping("/favorite")
+    @GetMapping("/course/view/{courseId}")
     public ResponseEntity<FavoriteDTO> displayFavoriteCourses() {
         FavoriteDTO favoriteDTO = new FavoriteDTO();
         return ResponseEntity.ok(favoriteDTO);
@@ -188,15 +188,23 @@ public class CourseController {
 
         // Fetch the user and course from the database
         Optional<User> userOpt = userRepository.findById(userId);
+        Optional<Course> courseOpt = courseRepository.findById(courseId);
 
-        if (userOpt.isEmpty()) {
-            return ResponseEntity.ok(Map.of("success", false, "message", "User not found"));
+        if (userOpt.isEmpty() || courseOpt.isEmpty()) {
+            return ResponseEntity.ok(Map.of("success", false, "message", "User or course not found"));
         }
 
         User user = userOpt.get();
+        Course course = courseOpt.get();
 
-        // Return a success response
-        return ResponseEntity.ok(Map.of("success", true, "message", "Course favorited successfully: " + user.getName()));
+        if (user.getFavoriteCourses().contains(course)) {
+            return ResponseEntity.ok(Map.of("success", false, "message", "Course already favorited by this user"));
+        }
+
+        user.addFavorite(course);
+
+        // Return a success response (or a different response based on your business logic)
+        return ResponseEntity.ok(Map.of("success", true, "message", "Course favorited successfully: " + course.getName()));
     }
 
 //    @PostMapping("/unfavorite/{courseId}")

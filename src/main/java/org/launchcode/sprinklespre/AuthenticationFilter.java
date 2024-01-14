@@ -21,6 +21,7 @@ public class AuthenticationFilter implements HandlerInterceptor {
     @Autowired
     AuthenticationController authenticationController;
     private static final List<String> whitelist = Arrays.asList("/login", "/register", "/logout", "/css");
+
     private static boolean isWhitelisted(String path) {
         for (String pathRoot : whitelist) {
             if (path.startsWith(pathRoot)) {
@@ -29,6 +30,7 @@ public class AuthenticationFilter implements HandlerInterceptor {
         }
         return false;
     }
+
     @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response,
@@ -49,7 +51,7 @@ public class AuthenticationFilter implements HandlerInterceptor {
         }
 
         // The user is NOT logged in
-        response.sendRedirect("/login");
-        return false;
+       response.sendRedirect("/login");
+       return false;
     }
 }
