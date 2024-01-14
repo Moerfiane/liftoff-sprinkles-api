@@ -83,6 +83,7 @@ public class CourseController {
     }
 
     //TODO: Update to ResponseEntity
+    //TODO: Read documentation JPA CRUD functionality, particularly @Transactional
     @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, methods = {RequestMethod.POST, RequestMethod.OPTIONS} )
     @PostMapping("/enroll")
     public ResponseEntity<?> enrollInACourse(@RequestBody EnrollDTO enrollDTO) {

@@ -11,7 +11,6 @@ import org.launchcode.sprinklespre.models.dto.RegisterFormDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Map;
 import java.util.Optional;
 
@@ -66,7 +65,7 @@ public class AuthenticationController {
 
         //String randomCode = generateRandomVerificationCode(); // Generate verification code
         User newUser = new User(registerFormDTO.getUsername(), registerFormDTO.getPassword());
-        newUser.setRole(registerFormDTO.getRole());
+        //newUser.setRole(registerFormDTO.getRole());
         userRepository.save(newUser);
 
 
