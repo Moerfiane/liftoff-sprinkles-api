@@ -19,8 +19,9 @@ public class User extends AbstractEntity{
     @OneToMany(mappedBy = "createdBy")
     private List<Review> reviews= new ArrayList<>();
 
+    //Should not be initialized as per Carrie's video class 18 20:55
     @ManyToMany(mappedBy ="users")
-    private List<Course> courses = new ArrayList<>();
+    private List<Course> courses;
 
     @ManyToMany
     @JoinTable(
