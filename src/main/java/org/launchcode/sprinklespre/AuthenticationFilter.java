@@ -20,7 +20,8 @@ public class AuthenticationFilter implements HandlerInterceptor {
 
     @Autowired
     AuthenticationController authenticationController;
-    private static final List<String> whitelist = Arrays.asList("/login", "/register", "/logout", "/css", "/courses");
+    private static final List<String> whitelist = Arrays.asList("/login", "/register", "/logout", "/css", "/courses", "/enroll");
+
     private static boolean isWhitelisted(String path) {
         for (String pathRoot : whitelist) {
             if (path.startsWith(pathRoot)) {
@@ -51,7 +52,8 @@ public class AuthenticationFilter implements HandlerInterceptor {
         }
 
         // The user is NOT logged in
-//        response.sendRedirect("/login");
+        //response.sendRedirect("/login");
+
         return false;
     }
 }

@@ -72,6 +72,7 @@ public class AuthenticationController {
 
         //String randomCode = generateRandomVerificationCode(); // Generate verification code
         User newUser = new User(registerFormDTO.getUsername(), registerFormDTO.getPassword());
+        //TODO: Need to update this to match front-end form
 //        newUser.setRole(registerFormDTO.getRole());
         userRepository.save(newUser);
 
@@ -110,10 +111,9 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginFormDTO loginFormDTO) {
-
-
+        System.out.println("getUsername "+ loginFormDTO.getUsername());
         User theUser = userRepository.findByUsername(loginFormDTO.getUsername());
-
+        System.out.println(theUser);
         if (theUser == null) {
             return ResponseEntity.badRequest().body("Invalid username");
         }

@@ -31,6 +31,7 @@ public class ModuleController {
     }
 
     //TODO: Check that course/module relationship is updated
+    //TODO: It's not! We need to addModules to course here
         //TODO: It's not! We need to addModules to course here
     //TODO: add category
 
@@ -46,9 +47,9 @@ public class ModuleController {
                     moduleFormDTO.getDescription(),
                     moduleFormDTO.getTools(),
                     moduleFormDTO.getIngredients(),
-                    moduleFormDTO.getCategory(),
                     moduleFormDTO.getNotes(),
-                    moduleFormDTO.getSteps()
+                    moduleFormDTO.getSteps(),
+                    moduleFormDTO.getCategory()
             );
             newModule.setName(moduleFormDTO.getName());
             System.out.println("newModule.getName():" + newModule.getName());
@@ -58,5 +59,7 @@ public class ModuleController {
             return ResponseEntity.ok(Map.of("success", false, "message", "Module not created; not associated with a course"));
         }
 
-       }
+
+    }
 }
+
