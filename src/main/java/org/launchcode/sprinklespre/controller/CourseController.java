@@ -186,7 +186,6 @@ public class CourseController {
         Integer courseId = favoriteDTO.getCourseId();
         Integer userId = favoriteDTO.getUserId();
 
-        // Fetch the user and course from the database
         Optional<User> userOpt = userRepository.findById(userId);
         Optional<Course> courseOpt = courseRepository.findById(courseId);
 
@@ -198,12 +197,12 @@ public class CourseController {
         Course course = courseOpt.get();
 
         if (user.getFavoriteCourses().contains(course)) {
-            return ResponseEntity.ok(Map.of("success", false, "message", "Course already favorited by this user"));
+            return ResponseEntity.ok(Map.of("success", false, "message", "You have already favorited this course."));
         }
 
+        course.getUsers().add(user);
         user.addFavorite(course);
 
-        // Return a success response (or a different response based on your business logic)
         return ResponseEntity.ok(Map.of("success", true, "message", "Course favorited successfully: " + course.getName()));
     }
 
