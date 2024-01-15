@@ -1,29 +1,37 @@
 package org.launchcode.sprinklespre.controller;
 
+//import jakarta.mail.MessagingException;
+//import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import jakarta.servlet.http.HttpSession;
 import org.launchcode.sprinklespre.models.User;
 import org.launchcode.sprinklespre.models.data.UserRepository;
 import org.launchcode.sprinklespre.models.dto.LoginFormDTO;
 import org.launchcode.sprinklespre.models.dto.RegisterFormDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.*;
-import java.util.Map;
 
+import java.util.Map;
 import java.util.Optional;
 
+
 @RestController
-@CrossOrigin(origins = "http://localhost:5182", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
 public class AuthenticationController {
     @Autowired
     UserRepository userRepository;
-    private static final String userSessionKey = "user";
 
+    //@Autowired
+    //public  JavaMailSender mailSender;
+
+    private static final String userSessionKey = "user";
 
 
     public User getUserFromSession(HttpSession session) {
@@ -47,41 +55,65 @@ public class AuthenticationController {
         return ResponseEntity.ok(registerFormDTO);
     }
 
-
-
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody RegisterFormDTO registerFormDTO) {
-
-
+        System.out.println("User registration triggered");
         User existingUser = userRepository.findByUsername(registerFormDTO.getUsername());
 
         if (existingUser != null) {
             return ResponseEntity.ok(Map.of("success", false, "message", "User already exists"));
         }
 
-
         String password = registerFormDTO.getPassword();
         String verifyPassword = registerFormDTO.getVerifyPassword();
         if (!password.equals(verifyPassword)) {
             return ResponseEntity.ok(Map.of("success", false, "message", "Passwords do not match"));
         }
+
+        //String randomCode = generateRandomVerificationCode(); // Generate verification code
         User newUser = new User(registerFormDTO.getUsername(), registerFormDTO.getPassword());
+        //TODO: Need to update this to match front-end form
+//        newUser.setRole(registerFormDTO.getRole());
         userRepository.save(newUser);
+
+
+
+//        try {
+//            sendVerificationEmail(newUser, "http://localhost:8080");
+//        } catch (MessagingException | UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//            // Handle the exception, e.g., return an error response
+//        }
+
         //setUserInSession(request.getSession(), newUser);
         return ResponseEntity.ok(Map.of("success", true, "message", "User registered successfully"));
 
     }
+
+//    @GetMapping("/verify")
+//    public String verifyUser(@RequestParam("code") String code) {
+//        User user = userRepository.findByVerificationCode(code);
+//        if (user == null || user.isEnabled()) {
+//            return "Verification failed";
+//        }
+//        user.setVerificationCode(null);
+//        user.setEnabled(true);
+//        userRepository.save(user);
+//        return "Account verified successfully";
+//    }
+
+
     @GetMapping("/login")
     public ResponseEntity<LoginFormDTO> displayLoginForm() {
         LoginFormDTO loginFormDTO = new LoginFormDTO();
         return ResponseEntity.ok(loginFormDTO);
     }
+
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginFormDTO loginFormDTO) {
-
-
+        System.out.println("getUsername "+ loginFormDTO.getUsername());
         User theUser = userRepository.findByUsername(loginFormDTO.getUsername());
-
+        System.out.println(theUser);
         if (theUser == null) {
             return ResponseEntity.badRequest().body("Invalid username");
         }
@@ -92,11 +124,13 @@ public class AuthenticationController {
             return ResponseEntity.badRequest().body("Invalid password");
         }
 
-       return ResponseEntity.ok("User logged in successfully");
+        return ResponseEntity.ok(Map.of("success", true, "message", "User registered successfully", "userId", theUser.getId(), "role", theUser.getRole()));
+
     }
+
     @GetMapping("/logout")
     public ResponseEntity<?> logout() {
-
+        //request.getSession().invalidate();
         return ResponseEntity.ok("Logout successful");
     }
 }

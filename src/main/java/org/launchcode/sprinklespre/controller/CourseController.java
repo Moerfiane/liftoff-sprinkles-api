@@ -125,8 +125,8 @@ public class CourseController {
 
     @GetMapping("/create")
     public ResponseEntity<CourseFormDTO> displayCourseForm() {
-        CourseFormDTO courseFormDTO = new CourseFormDTO();
-        return ResponseEntity.ok(courseFormDTO);
+            CourseFormDTO courseFormDTO = new CourseFormDTO();
+            return ResponseEntity.ok(courseFormDTO);
     }
 
     //Done: bypass via whitelist so i can start testing/adding data
@@ -233,3 +233,5 @@ public class CourseController {
 //        return "redirect:/courses/view/" + courseId;
 //    }
 }
+
+
