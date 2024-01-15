@@ -102,9 +102,9 @@ public class User extends AbstractEntity{
         return (double) completedModulesList.size() / course.getTotalModules() * 100;
     }
 
-    public List<CourseProgressDTO> getCourseProgressForUser(User user) {
+    public List<CourseProgressDTO> getCourseProgressForUser() {
 
-        List<Course> userCourses = user.getCourses();
+        List<Course> userCourses = this.getCourses();
         List<CourseProgressDTO> progressList = new ArrayList<>();
 
 
