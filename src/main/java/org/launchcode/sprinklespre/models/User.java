@@ -36,8 +36,8 @@ public class User extends AbstractEntity{
 
     @NotNull
     private String pwHash;
-    @ManyToMany
-    private List<Course> favoriteCourses = new ArrayList<Course>();
+    @OneToMany
+    private List<Course> favoriteCourses = new ArrayList<>();
     @NotNull
     private String role;
 
@@ -52,7 +52,7 @@ public class User extends AbstractEntity{
         super();
         this.username = username;
         this.pwHash = encoder.encode(password);
-        this.favoriteCourses = new ArrayList<Course>();
+        this.favoriteCourses = new ArrayList<>();
         this.role = "user";
     }
     // Getters and setters

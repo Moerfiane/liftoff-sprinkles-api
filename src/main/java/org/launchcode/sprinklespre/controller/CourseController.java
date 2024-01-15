@@ -200,7 +200,6 @@ public class CourseController {
             return ResponseEntity.ok(Map.of("success", false, "message", "You have already favorited this course."));
         }
 
-        course.getUsers().add(user);
         user.addFavorite(course);
 
         return ResponseEntity.ok(Map.of("success", true, "message", "Course favorited successfully: " + course.getName()));
