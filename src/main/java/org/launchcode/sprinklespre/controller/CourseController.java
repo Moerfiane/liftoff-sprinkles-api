@@ -201,6 +201,7 @@ public class CourseController {
         }
 
         user.addFavorite(course);
+        userRepository.save(user);
 
         return ResponseEntity.ok(Map.of("success", true, "message", "Course favorited successfully: " + course.getName()));
     }
