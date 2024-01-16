@@ -2,7 +2,9 @@ package org.launchcode.sprinklespre.controller;
 
 //import jakarta.mail.MessagingException;
 //import jakarta.mail.internet.MimeMessage;
-
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import jakarta.servlet.http.HttpSession;
 import org.launchcode.sprinklespre.models.User;
 import org.launchcode.sprinklespre.models.data.UserRepository;
@@ -16,7 +18,7 @@ import java.util.Optional;
 
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
 public class AuthenticationController {
     @Autowired
     UserRepository userRepository;
@@ -50,7 +52,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody RegisterFormDTO registerFormDTO) {
-
+        System.out.println("User registration triggered");
         User existingUser = userRepository.findByUsername(registerFormDTO.getUsername());
 
         if (existingUser != null) {
@@ -65,7 +67,8 @@ public class AuthenticationController {
 
         //String randomCode = generateRandomVerificationCode(); // Generate verification code
         User newUser = new User(registerFormDTO.getUsername(), registerFormDTO.getPassword());
-        //newUser.setRole(registerFormDTO.getRole());
+        //TODO: Need to update this to match front-end form
+//        newUser.setRole(registerFormDTO.getRole());
         userRepository.save(newUser);
 
 
@@ -103,10 +106,9 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginFormDTO loginFormDTO) {
-
-
+        System.out.println("getUsername "+ loginFormDTO.getUsername());
         User theUser = userRepository.findByUsername(loginFormDTO.getUsername());
-
+        System.out.println(theUser);
         if (theUser == null) {
             return ResponseEntity.badRequest().body("Invalid username");
         }
