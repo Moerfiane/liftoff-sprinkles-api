@@ -36,7 +36,7 @@ public class User extends AbstractEntity{
 
     @NotNull
     private String pwHash;
-    @OneToMany
+    @OneToMany(mappedBy = "")
     private List<Course> favoriteCourses = new ArrayList<>();
     @NotNull
     private String role;
