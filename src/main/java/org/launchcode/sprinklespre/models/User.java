@@ -89,7 +89,7 @@ public class User extends AbstractEntity{
     }
 
     // Method to mark a module as completed by the user
-    void completeModule(Module module) {
+    public void completeModule(Module module) {
 
         if (!module.isCompleted) {
             module.finishModule();
