@@ -99,7 +99,7 @@ public class User extends AbstractEntity{
     }
 
     // Method to get the user's progress in a course
-    double getProgress(Course course) {
+    public Integer getProgress(Course course) {
 
         // Filter completed modules for the specific course
         List<Module> completedModulesInThisCourse = completedModulesList
@@ -107,7 +107,7 @@ public class User extends AbstractEntity{
                 .filter(module -> module.getCourse().equals(course))
                 .toList();
 
-        return (double) completedModulesInThisCourse.size() / course.getTotalModules() * 100;
+        return Math.round((float) completedModulesInThisCourse.size() / course.getTotalModules() * 100);
 
     }
 
@@ -118,7 +118,7 @@ public class User extends AbstractEntity{
 
 
         for (Course course : userCourses) {
-            double progress = getProgress(course);
+            Integer progress = getProgress(course);
             progressList.add(new CourseProgressDTO(course.getName(), progress));
         }
 
