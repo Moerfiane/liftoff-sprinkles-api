@@ -40,6 +40,7 @@ public class User extends AbstractEntity{
     @NotNull
     private String role;
 
+    private List<Integer> favoriteCourseIds = new ArrayList<>();
 
    // private boolean enabled = false;
 
@@ -50,7 +51,6 @@ public class User extends AbstractEntity{
     public User(String username, String password) {
         super();
         this.username = username;
-
         this.pwHash = encoder.encode(password);
         this.role = "user";
     }
@@ -116,5 +116,11 @@ public class User extends AbstractEntity{
 
         return progressList;
     }
+    public List<Integer> getFavoriteCourseIds() {
+        return favoriteCourseIds;
+    }
 
+    public void setFavoriteCourseIds(List<Integer> favoriteCourseIds) {
+        this.favoriteCourseIds = favoriteCourseIds;
+    }
 }
