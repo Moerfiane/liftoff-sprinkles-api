@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public class User extends AbstractEntity{
@@ -99,7 +100,15 @@ public class User extends AbstractEntity{
 
     // Method to get the user's progress in a course
     double getProgress(Course course) {
-        return (double) completedModulesList.size() / course.getTotalModules() * 100;
+
+        // Filter completed modules for the specific course
+        List<Module> completedModulesInThisCourse = completedModulesList
+                .stream()
+                .filter(module -> module.getCourse().equals(course))
+                .toList();
+
+        return (double) completedModulesInThisCourse.size() / course.getTotalModules() * 100;
+
     }
 
     public List<CourseProgressDTO> getCourseProgressForUser() {
@@ -110,7 +119,6 @@ public class User extends AbstractEntity{
 
         for (Course course : userCourses) {
             double progress = getProgress(course);
-
             progressList.add(new CourseProgressDTO(course.getName(), progress));
         }
 
