@@ -2,9 +2,7 @@ package org.launchcode.sprinklespre.controller;
 
 //import jakarta.mail.MessagingException;
 //import jakarta.mail.internet.MimeMessage;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
+
 import jakarta.servlet.http.HttpSession;
 import org.launchcode.sprinklespre.models.User;
 import org.launchcode.sprinklespre.models.data.UserRepository;
@@ -14,16 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.Errors;
-
 import java.util.Map;
 import java.util.Optional;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class AuthenticationController {
     @Autowired
     UserRepository userRepository;
