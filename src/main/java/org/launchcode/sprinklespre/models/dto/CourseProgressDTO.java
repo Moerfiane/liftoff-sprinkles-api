@@ -5,7 +5,6 @@ import java.util.List;
 public class CourseProgressDTO {
     private String courseName;
     private double courseProgress;
-    private List<ModuleProgressDTO> moduleProgress;  // Include module progress information
 
     public CourseProgressDTO(String courseName, double courseProgress) {
         this.courseName = courseName;
@@ -30,11 +29,4 @@ public class CourseProgressDTO {
         this.courseProgress = courseProgress;
     }
 
-    public List<ModuleProgressDTO> getModuleProgress() {
-        return moduleProgress;
-    }
-
-    public void setModuleProgress(List<ModuleProgressDTO> moduleProgress) {
-        this.moduleProgress = moduleProgress;
-    }
 }

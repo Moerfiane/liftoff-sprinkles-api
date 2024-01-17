@@ -41,6 +41,7 @@ public class User extends AbstractEntity{
     @NotNull
     private String role;
 
+    private List<Integer> favoriteCourseIds = new ArrayList<>();
 
    // private boolean enabled = false;
 
@@ -109,7 +110,7 @@ public class User extends AbstractEntity{
 //    }
 
     // Method to mark a module as completed by the user
-    void completeModule(Module module) {
+    public void completeModule(Module module) {
 
         if (!module.isCompleted) {
             module.finishModule();
@@ -135,5 +136,12 @@ public class User extends AbstractEntity{
         }
 
         return progressList;
+    }
+    public List<Integer> getFavoriteCourseIds() {
+        return favoriteCourseIds;
+    }
+
+    public void setFavoriteCourseIds(List<Integer> favoriteCourseIds) {
+        this.favoriteCourseIds = favoriteCourseIds;
     }
 }
