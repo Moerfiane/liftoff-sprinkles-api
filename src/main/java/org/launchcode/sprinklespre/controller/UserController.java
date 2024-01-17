@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.launchcode.sprinklespre.models.data.UserRepository;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -52,26 +53,12 @@ public class UserController {
         if(userOptional.isPresent()) {
             User user = userOptional.get();
             List<CourseProgressDTO> enrolledCourses = user.getCourseProgressForUser();
-            return ResponseEntity.ok(Map.of("success", true, "data", enrolledCourses));
+
+            return ResponseEntity.ok(Map.of("success", true, "enrolledCourses", enrolledCourses));
         } else {
-            return ResponseEntity.ok(Map.of("success", true, "message", "Failed to fetch courses"));
+            return ResponseEntity.ok(Map.of("success", false, "message", "Failed to fetch courses"));
         }
     }
-
-//    @GetMapping("/progress")
-//    @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, methods = {RequestMethod.GET})
-//    public ResponseEntity<List<CourseProgressDTO>> getCourseProgress(@RequestBody UserDTO userDTO) {
-//
-//        Optional<User> userOptional = userRepository.findById(userDTO.getUserId());
-//
-//        if(userOptional.isPresent()) {
-//            User user = userOptional.get();
-//            List<CourseProgressDTO> courseProgress = user.getCourseProgressForUser();
-//            return ResponseEntity.ok(courseProgress);
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
 
     @GetMapping("/complete-module")
     public ResponseEntity<CompleteModuleDTO> processModuleData(@RequestParam Integer moduleId) {
