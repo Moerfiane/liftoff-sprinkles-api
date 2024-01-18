@@ -118,11 +118,9 @@ public class CourseController {
         return ResponseEntity.ok(Map.of("success", true, "message", "Enrolled successfully in course" + course.getName()));
     }
 
-    @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, methods = {RequestMethod.POST, RequestMethod.DELETE, RequestMethod.OPTIONS})
-    @PostMapping("/unenroll")
-    public ResponseEntity<?> unenrollFromCourse(@RequestBody EnrollDTO enrollDTO) {
-        Integer courseId = enrollDTO.getCourseId();
-        Integer userId = enrollDTO.getUserId();
+    @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
+    @DeleteMapping("/unenroll/{userId}/{courseId}")
+    public ResponseEntity<?> unenrollFromCourse(@PathVariable Integer userId, @PathVariable Integer courseId) {
 
         Optional<User> userOpt = userRepository.findById(userId);
         Optional<Course> courseOpt = courseRepository.findById(courseId);
@@ -133,16 +131,18 @@ public class CourseController {
         User user = userOpt.get();
         Course course = courseOpt.get();
 
+
         if (!course.getUsers().contains(user)) {
             return ResponseEntity.ok(Map.of("success", false, "message", "User not enrolled in this course"));
         }
+
 
         course.getUsers().remove(user);
         courseRepository.save(course);
         user.getCourses().remove(course);
         userRepository.save(user);
 
-        // Return a success response
+
         return ResponseEntity.ok(Map.of("success", true, "message", "Unenrolled successfully from course " + course.getName()));
     }
 
