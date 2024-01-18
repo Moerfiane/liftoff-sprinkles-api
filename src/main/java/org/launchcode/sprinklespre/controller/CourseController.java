@@ -86,11 +86,8 @@ public class CourseController {
     @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, methods = {RequestMethod.POST, RequestMethod.OPTIONS} )
     @PostMapping("/enroll")
     public ResponseEntity<?> enrollInACourse(@RequestBody EnrollDTO enrollDTO) {
-        System.out.println("Attempting to enroll");
         Integer courseId = enrollDTO.getCourseId();
         Integer userId = enrollDTO.getUserId();
-        System.out.println("courseId:" + courseId);
-        System.out.println("userId:" + userId);
 
         // Fetch the user and course from the database
         Optional<User> userOpt = userRepository.findById(userId);
@@ -113,14 +110,40 @@ public class CourseController {
 
         // Perform the enrollment
         course.getUsers().add(user);
-        System.out.println("course.getUsers: " + course.getUsers());
         courseRepository.save(course);
-        System.out.println("course.getUsers: " + course.getUsers());
         user.getCourses().add(course);
         userRepository.save(user);
 
         // Return a success response
         return ResponseEntity.ok(Map.of("success", true, "message", "Enrolled successfully in course" + course.getName()));
+    }
+
+    @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, methods = {RequestMethod.POST, RequestMethod.DELETE, RequestMethod.OPTIONS})
+    @PostMapping("/unenroll")
+    public ResponseEntity<?> unenrollFromCourse(@RequestBody EnrollDTO enrollDTO) {
+        Integer courseId = enrollDTO.getCourseId();
+        Integer userId = enrollDTO.getUserId();
+
+        Optional<User> userOpt = userRepository.findById(userId);
+        Optional<Course> courseOpt = courseRepository.findById(courseId);
+        if (userOpt.isEmpty() || courseOpt.isEmpty()) {
+            return ResponseEntity.ok(Map.of("success", false, "message", "User or course not found"));
+        }
+
+        User user = userOpt.get();
+        Course course = courseOpt.get();
+
+        if (!course.getUsers().contains(user)) {
+            return ResponseEntity.ok(Map.of("success", false, "message", "User not enrolled in this course"));
+        }
+
+        course.getUsers().remove(user);
+        courseRepository.save(course);
+        user.getCourses().remove(course);
+        userRepository.save(user);
+
+        // Return a success response
+        return ResponseEntity.ok(Map.of("success", true, "message", "Unenrolled successfully from course " + course.getName()));
     }
 
     @GetMapping("/create")
