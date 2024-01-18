@@ -51,7 +51,6 @@ public class User extends AbstractEntity{
     public User(String username, String password) {
         super();
         this.username = username;
-
         this.pwHash = encoder.encode(password);
         this.role = "user";
     }
@@ -123,6 +122,14 @@ public class User extends AbstractEntity{
         }
 
         return progressList;
+    }
+
+    public void updatePassword(String currentPassword, String newPassword) {
+        if (isMatchingPassword(currentPassword)) {
+            this.pwHash = encoder.encode(newPassword);
+        } else {
+            System.out.println("Invalid current password");
+        }
     }
 
 }
