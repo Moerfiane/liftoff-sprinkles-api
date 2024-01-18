@@ -1,5 +1,6 @@
 package org.launchcode.sprinklespre.controller;
 
+import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.apache.coyote.Response;
@@ -7,11 +8,13 @@ import org.launchcode.sprinklespre.models.Course;
 import org.launchcode.sprinklespre.models.Module;
 import org.launchcode.sprinklespre.models.User;
 import org.launchcode.sprinklespre.models.data.ModuleRepository;
+import org.launchcode.sprinklespre.models.dto.ChangePasswordDTO;
 import org.launchcode.sprinklespre.models.dto.CompleteModuleDTO;
 import org.launchcode.sprinklespre.models.dto.CourseProgressDTO;
 import org.launchcode.sprinklespre.models.dto.FavoriteDTO;
 import org.launchcode.sprinklespre.models.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -94,6 +97,27 @@ public class UserController {
         }
         return ResponseEntity.ok(Map.of("success", false, "message", "User not found"));
     }
+
+
+    @PutMapping("/{userId}/password")
+    @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, methods = {RequestMethod.PUT, RequestMethod.OPTIONS})
+    public ResponseEntity<?> changePassword(@PathVariable Integer userId, @RequestBody ChangePasswordDTO changePasswordDTO) {
+
+        Optional<User> userOptional = userRepository.findById(userId);
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            String currentPassword = changePasswordDTO.getCurrentPassword();
+            String newPassword = changePasswordDTO.getNewPassword();
+            System.out.println("current pw: " + currentPassword);
+            System.out.println("new pw: " + newPassword);
+            user.updatePassword(currentPassword, newPassword);
+            userRepository.save(user);
+
+            return ResponseEntity.ok(Map.of("success", true, "message", "Password changed successfully"));
+        } else {
+            return ResponseEntity.ok(Map.of("success", false, "message", "User not found"));
+        }
 
     @GetMapping("/favorite")
     public ResponseEntity<FavoriteDTO> displayFavoriteCourses() {
