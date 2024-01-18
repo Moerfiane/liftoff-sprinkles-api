@@ -4,12 +4,14 @@ import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.apache.coyote.Response;
+import org.launchcode.sprinklespre.models.Course;
 import org.launchcode.sprinklespre.models.Module;
 import org.launchcode.sprinklespre.models.User;
 import org.launchcode.sprinklespre.models.data.ModuleRepository;
 import org.launchcode.sprinklespre.models.dto.ChangePasswordDTO;
 import org.launchcode.sprinklespre.models.dto.CompleteModuleDTO;
 import org.launchcode.sprinklespre.models.dto.CourseProgressDTO;
+import org.launchcode.sprinklespre.models.dto.FavoriteDTO;
 import org.launchcode.sprinklespre.models.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
@@ -18,11 +20,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.launchcode.sprinklespre.models.data.UserRepository;
+import org.launchcode.sprinklespre.models.data.CourseRepository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/dashboard")
@@ -34,6 +34,9 @@ public class UserController {
 
     @Autowired
     ModuleRepository moduleRepository;
+
+    @Autowired
+    CourseRepository courseRepository;
 
     @Autowired
     private AuthenticationController authenticationController;
@@ -95,6 +98,7 @@ public class UserController {
         return ResponseEntity.ok(Map.of("success", false, "message", "User not found"));
     }
 
+
     @PutMapping("/{userId}/password")
     @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, methods = {RequestMethod.PUT, RequestMethod.OPTIONS})
     public ResponseEntity<?> changePassword(@PathVariable Integer userId, @RequestBody ChangePasswordDTO changePasswordDTO) {
@@ -114,6 +118,51 @@ public class UserController {
         } else {
             return ResponseEntity.ok(Map.of("success", false, "message", "User not found"));
         }
+
+    @GetMapping("/favorite")
+    public ResponseEntity<FavoriteDTO> displayFavoriteCourses() {
+        FavoriteDTO favoriteDTO = new FavoriteDTO();
+        return ResponseEntity.ok(favoriteDTO);
+    }
+
+    @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, methods = {RequestMethod.POST, RequestMethod.OPTIONS})
+    @PostMapping("/favorite")
+    public ResponseEntity<?> favoriteCourse(@RequestBody FavoriteDTO favoriteDTO) {
+        Integer courseId = favoriteDTO.getCourseId();
+        Integer userId = favoriteDTO.getUserId();
+
+        Optional<User> userOpt = userRepository.findById(userId);
+        Optional<Course> courseOpt = courseRepository.findById(courseId);
+
+        if (userOpt.isEmpty() || courseOpt.isEmpty()) {
+            return ResponseEntity.ok(Map.of("success", false, "message", "User or course not found"));
+        }
+
+        User user = userOpt.get();
+        Course course = courseOpt.get();
+        List<Integer> favoriteCourses = user.getFavoriteCourseIds();
+        System.out.println(favoriteCourses);
+
+        if (favoriteCourses == null) {
+            // If the list is null, initialize it as an empty list
+            favoriteCourses = new ArrayList<>();
+            user.setFavoriteCourseIds(favoriteCourses);
+        }
+
+        if (favoriteCourses.contains(courseId)) {
+            return ResponseEntity.ok(Map.of("success", false, "message", "You have already favorited this course."));
+        }
+        // set list
+        user.getFavoriteCourseIds().add(courseId);
+        userRepository.save(user);
+
+        List<Course> courseObjs = (List<Course>) courseRepository.findAllById(favoriteCourses);
+
+        // for each id in favoriteCourses
+        // set favoriteCourseObjects to equal courseRepository
+        // List<Skill> skillObjs = (List<Skill>) skillRepository.findAllById(skills);
+
+        return ResponseEntity.ok(Map.of("success", true, "message", "Course favorited successfully: " + course.getName(), "data", courseObjs));
     }
 
 }

@@ -17,9 +17,6 @@ import java.util.stream.Collectors;
 @Entity
 public class User extends AbstractEntity{
 
-    @OneToMany(mappedBy = "createdBy")
-    private List<Review> reviews= new ArrayList<>();
-
     //Should not be initialized as per Carrie's video class 18 20:55
     @ManyToMany(mappedBy ="users")
     private List<Course> courses;
@@ -41,6 +38,7 @@ public class User extends AbstractEntity{
     @NotNull
     private String role;
 
+    private List<Integer> favoriteCourseIds = new ArrayList<>();
 
    // private boolean enabled = false;
 
@@ -123,6 +121,10 @@ public class User extends AbstractEntity{
 
         return progressList;
     }
+    public List<Integer> getFavoriteCourseIds() {
+        return favoriteCourseIds;
+    }
+
 
     public void updatePassword(String currentPassword, String newPassword) {
         if (isMatchingPassword(currentPassword)) {
@@ -132,4 +134,8 @@ public class User extends AbstractEntity{
         }
     }
 
+
+    public void setFavoriteCourseIds(List<Integer> favoriteCourseIds) {
+        this.favoriteCourseIds = favoriteCourseIds;
+    }
 }

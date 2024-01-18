@@ -66,6 +66,7 @@ public class AuthenticationController {
 
         //String randomCode = generateRandomVerificationCode(); // Generate verification code
         User newUser = new User(registerFormDTO.getUsername(), registerFormDTO.getPassword());
+        newUser.setRole(registerFormDTO.getRole());
         //TODO: Need to update this to match front-end form
 //        newUser.setRole(registerFormDTO.getRole());
         userRepository.save(newUser);
@@ -80,7 +81,7 @@ public class AuthenticationController {
 //        }
 
         //setUserInSession(request.getSession(), newUser);
-        return ResponseEntity.ok(Map.of("success", true, "message", "User registered successfully"));
+        return ResponseEntity.ok(Map.of("success", true, "message", "User registered successfully", "userId", newUser.getId(), "role", newUser.getRole() ));
 
     }
 
