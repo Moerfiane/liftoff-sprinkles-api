@@ -95,14 +95,14 @@ public class UserController {
         return ResponseEntity.ok(Map.of("success", false, "message", "User not found"));
     }
 
-    @GetMapping("/favorite")
-    public ResponseEntity<FavoriteDTO> displayFavoriteCourses() {
+    @GetMapping("/favorite/confirm")
+    public ResponseEntity<FavoriteDTO> confirmFavoriteCourse() {
         FavoriteDTO favoriteDTO = new FavoriteDTO();
         return ResponseEntity.ok(favoriteDTO);
     }
 
     @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, methods = {RequestMethod.POST, RequestMethod.OPTIONS})
-    @PostMapping("/favorite")
+    @PostMapping("/favorite/confirm")
     public ResponseEntity<?> favoriteCourse(@RequestBody FavoriteDTO favoriteDTO) {
         Integer courseId = favoriteDTO.getCourseId();
         Integer userId = favoriteDTO.getUserId();
@@ -126,11 +126,48 @@ public class UserController {
         }
 
         if (favoriteCourses.contains(courseId)) {
-            return ResponseEntity.ok(Map.of("success", false, "message", "You have already favorited this course."));
+            return ResponseEntity.ok(Map.of("success", false, "message", "You have already added this course to your favorites."));
         }
         // set list
         user.getFavoriteCourseIds().add(courseId);
         userRepository.save(user);
+
+//        List<Course> courseObjs = (List<Course>) courseRepository.findAllById(favoriteCourses);
+
+        // for each id in favoriteCourses
+        // set favoriteCourseObjects to equal courseRepository
+        // List<Skill> skillObjs = (List<Skill>) skillRepository.findAllById(skills);
+
+        return ResponseEntity.ok(Map.of("success", true, "message", "Course successfully added to favorites: " + course.getName()));
+    }
+
+    @GetMapping("/favorite")
+    public ResponseEntity<FavoriteDTO> displayFavoriteCourses() {
+
+        FavoriteDTO favoriteDTO = new FavoriteDTO();
+        return ResponseEntity.ok(favoriteDTO);
+    }
+
+    @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, methods = {RequestMethod.POST, RequestMethod.OPTIONS})
+    @PostMapping("/favorite")
+    public ResponseEntity<?> listFavoriteCourses(@RequestBody FavoriteDTO favoriteDTO) {
+        Integer userId = favoriteDTO.getUserId();
+
+        Optional<User> userOpt = userRepository.findById(userId);
+
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.ok(Map.of("success", false, "message", "User not found"));
+        }
+
+        User user = userOpt.get();
+        List<Integer> favoriteCourses = user.getFavoriteCourseIds();
+        System.out.println(favoriteCourses);
+
+        if (favoriteCourses == null) {
+            // If the list is null, initialize it as an empty list
+            favoriteCourses = new ArrayList<>();
+            user.setFavoriteCourseIds(favoriteCourses);
+        }
 
         List<Course> courseObjs = (List<Course>) courseRepository.findAllById(favoriteCourses);
 
@@ -138,7 +175,7 @@ public class UserController {
         // set favoriteCourseObjects to equal courseRepository
         // List<Skill> skillObjs = (List<Skill>) skillRepository.findAllById(skills);
 
-        return ResponseEntity.ok(Map.of("success", true, "message", "Course favorited successfully: " + course.getName(), "data", courseObjs));
+        return ResponseEntity.ok(Map.of("success", true, "message", "Favorite retrieved successfully: ", "data", courseObjs));
     }
 
 }
