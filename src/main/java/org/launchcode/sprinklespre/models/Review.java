@@ -2,51 +2,32 @@ package org.launchcode.sprinklespre.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-
-import java.time.LocalDateTime;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name="reviews")
-public class Review extends AbstractEntity{
+public class Review extends AbstractEntity {
 
-    @ManyToOne
-    private User createdBy;
+    @NotBlank(message = "Name is required")
+    private String name;
 
-    private LocalDateTime createdDate;
+    @NotBlank(message = "Comment is required")
+    @Column(columnDefinition = "TEXT")
+    private String comment;
 
-    @Column(columnDefinition= "TEXT")
-    private String content;
-
+    @NotNull(message = "Rating is required")
     private Integer rating;
 
     public Review() {
 
     }
 
-    public User getCreatedBy() {
-        return createdBy;
+    public String getComment() {
+        return comment;
     }
 
-    public void setCreatedBy(User createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public Integer getRating() {
@@ -55,5 +36,15 @@ public class Review extends AbstractEntity{
 
     public void setRating(Integer rating) {
         this.rating = rating;
+    }
+
+
+    public String getName() {
+        return name;
+    }
+
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
