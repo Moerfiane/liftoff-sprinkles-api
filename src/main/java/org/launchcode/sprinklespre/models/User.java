@@ -125,6 +125,16 @@ public class User extends AbstractEntity{
         return favoriteCourseIds;
     }
 
+
+    public void updatePassword(String currentPassword, String newPassword) {
+        if (isMatchingPassword(currentPassword)) {
+            this.pwHash = encoder.encode(newPassword);
+        } else {
+            System.out.println("Invalid current password");
+        }
+    }
+
+
     public void setFavoriteCourseIds(List<Integer> favoriteCourseIds) {
         this.favoriteCourseIds = favoriteCourseIds;
     }
