@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5180", maxAge = 3600, methods = {RequestMethod.POST} )
+@CrossOrigin(origins = "*", maxAge = 3600 )
 public class ReviewController {
     private final ReviewRepository reviewRepository;
 
